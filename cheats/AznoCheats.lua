@@ -1,5 +1,5 @@
 -- AznoCheats
--- Multi-tab · Full main-menu animations
+-- Press INSERT to open the panel
 
 local AUTH_KEY = "CHANGE_ME_TO_YOUR_PRIVATE_KEY"
 local REMOTE_KEY_URL = ""
@@ -35,7 +35,7 @@ local function tween(obj, props, t, style, dir)
     return tw
 end
 
--- AUTH (compact)
+-- AUTH
 local AuthGui = Instance.new("ScreenGui")
 AuthGui.Name = "AznoAuth"
 AuthGui.ResetOnSpawn = false
@@ -350,15 +350,42 @@ local function openMenu()
         end)
     end
 
-    -- ===================== MAIN MENU UI ===================== --
+    -- UI
     local Gui = Instance.new("ScreenGui")
     Gui.Name = "AznoCheats"
     Gui.ResetOnSpawn = false
     Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     Gui.Parent = game:GetService("CoreGui")
 
+    -- Toast: Press INSERT
+    local Toast = Instance.new("Frame")
+    Toast.Size = UDim2.new(0, 280, 0, 40)
+    Toast.Position = UDim2.new(0.5, -140, 0, -50)
+    Toast.BackgroundColor3 = Color3.fromRGB(18, 18, 24)
+    Toast.BorderSizePixel = 0
+    Toast.Parent = Gui
+    Instance.new("UICorner", Toast).CornerRadius = UDim.new(0, 8)
+    local ToastStroke = Instance.new("UIStroke")
+    ToastStroke.Color = Color3.fromRGB(225, 29, 46)
+    ToastStroke.Thickness = 1
+    ToastStroke.Transparency = 0.4
+    ToastStroke.Parent = Toast
+    local ToastText = Instance.new("TextLabel")
+    ToastText.Size = UDim2.new(1, 0, 1, 0)
+    ToastText.BackgroundTransparency = 1
+    ToastText.Text = "Press INSERT to open AznoCheats"
+    ToastText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ToastText.Font = Enum.Font.GothamBold
+    ToastText.TextSize = 13
+    ToastText.Parent = Toast
+    tween(Toast, {Position = UDim2.new(0.5, -140, 0, 20)}, 0.4, Enum.EasingStyle.Back)
+    task.delay(3.5, function()
+        tween(Toast, {Position = UDim2.new(0.5, -140, 0, -50)}, 0.3)
+        task.delay(0.35, function() Toast:Destroy() end)
+    end)
+
     local Main = Instance.new("Frame")
-    Main.Size = UDim2.new(0, 0, 0, 0)
+    Main.Size = UDim2.new(0, 560, 0, 380)
     Main.Position = UDim2.new(0.5, 0, 0.5, 0)
     Main.AnchorPoint = Vector2.new(0.5, 0.5)
     Main.BackgroundColor3 = Color3.fromRGB(16, 16, 22)
@@ -366,33 +393,31 @@ local function openMenu()
     Main.Active = true
     Main.Draggable = true
     Main.ClipsDescendants = true
+    Main.Visible = false
     Main.Parent = Gui
     Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 12)
 
     local Stroke = Instance.new("UIStroke")
     Stroke.Color = Color3.fromRGB(225, 29, 46)
     Stroke.Thickness = 1.5
-    Stroke.Transparency = 1
+    Stroke.Transparency = 0.5
     Stroke.Parent = Main
 
-    -- Open: scale + slight bounce
-    tween(Main, {Size = UDim2.new(0, 560, 0, 380)}, 0.4, Enum.EasingStyle.Back)
-    tween(Stroke, {Transparency = 0.5}, 0.45)
-
-    -- Glow pulse loop
     task.spawn(function()
         while Main.Parent do
-            tween(Stroke, {Transparency = 0.3, Color = Color3.fromRGB(255, 55, 75)}, 1.1)
-            task.wait(1.1)
-            tween(Stroke, {Transparency = 0.6, Color = Color3.fromRGB(225, 29, 46)}, 1.1)
-            task.wait(1.1)
+            if Main.Visible then
+                tween(Stroke, {Transparency = 0.3, Color = Color3.fromRGB(255, 55, 75)}, 1.1)
+                task.wait(1.1)
+                tween(Stroke, {Transparency = 0.6, Color = Color3.fromRGB(225, 29, 46)}, 1.1)
+                task.wait(1.1)
+            else
+                task.wait(0.5)
+            end
         end
     end)
 
-    -- Sidebar slides in from left
     local Side = Instance.new("Frame")
     Side.Size = UDim2.new(0, 130, 1, 0)
-    Side.Position = UDim2.new(0, -130, 0, 0)
     Side.BackgroundColor3 = Color3.fromRGB(12, 12, 16)
     Side.BorderSizePixel = 0
     Side.Parent = Main
@@ -403,7 +428,6 @@ local function openMenu()
     SideFix.BackgroundColor3 = Color3.fromRGB(12, 12, 16)
     SideFix.BorderSizePixel = 0
     SideFix.Parent = Side
-    tween(Side, {Position = UDim2.new(0, 0, 0, 0)}, 0.35, Enum.EasingStyle.Quint)
 
     local Logo = Instance.new("TextLabel")
     Logo.Size = UDim2.new(1, 0, 0, 44)
@@ -412,19 +436,16 @@ local function openMenu()
     Logo.TextColor3 = Color3.fromRGB(225, 29, 46)
     Logo.Font = Enum.Font.GothamBold
     Logo.TextSize = 12
-    Logo.TextTransparency = 1
     Logo.Parent = Side
-    task.delay(0.15, function() tween(Logo, {TextTransparency = 0}, 0.35) end)
 
     local Accent = Instance.new("Frame")
-    Accent.Size = UDim2.new(0, 0, 0, 2)
+    Accent.Size = UDim2.new(0, 64, 0, 2)
     Accent.Position = UDim2.new(0.5, 0, 0, 40)
     Accent.AnchorPoint = Vector2.new(0.5, 0)
     Accent.BackgroundColor3 = Color3.fromRGB(225, 29, 46)
     Accent.BorderSizePixel = 0
     Accent.Parent = Side
     Instance.new("UICorner", Accent).CornerRadius = UDim.new(1, 0)
-    task.delay(0.25, function() tween(Accent, {Size = UDim2.new(0, 64, 0, 2)}, 0.4, Enum.EasingStyle.Back) end)
 
     local tabs = {"World", "Character", "Aim", "Visuals", "Games"}
     local tabBtns, pages = {}, {}
@@ -459,43 +480,10 @@ local function openMenu()
         return p
     end
     for _,n in ipairs(tabs) do makePage(n) end
-
-    -- Stagger animate children of a page
-    local function animatePageIn(page)
-        local children = {}
-        for _, child in ipairs(page:GetChildren()) do
-            if child:IsA("Frame") or child:IsA("TextLabel") then
-                table.insert(children, child)
-            end
-        end
-        for i, child in ipairs(children) do
-            local orig = child.Position
-            child.Position = orig + UDim2.new(0, 18, 0, 0)
-            if child:IsA("Frame") then
-                child.BackgroundTransparency = 1
-            end
-            if child:IsA("TextLabel") or (child:FindFirstChildWhichIsA("TextLabel")) then
-                -- handled per row
-            end
-            task.delay(0.03 * (i-1), function()
-                if child:IsA("Frame") then
-                    tween(child, {Position = orig, BackgroundTransparency = 0}, 0.22, Enum.EasingStyle.Quint)
-                else
-                    tween(child, {Position = orig}, 0.22, Enum.EasingStyle.Quint)
-                end
-            end)
-        end
-    end
+    pages["World"].Visible = true
 
     local function switchTab(name, idx)
-        for n, p in pairs(pages) do
-            if n == name then
-                p.Visible = true
-                animatePageIn(p)
-            else
-                p.Visible = false
-            end
-        end
+        for n, p in pairs(pages) do p.Visible = (n == name) end
         for n, b in pairs(tabBtns) do
             if n == name then
                 tween(b, {BackgroundColor3 = Color3.fromRGB(225,29,46), TextColor3 = Color3.fromRGB(255,255,255)}, 0.15)
@@ -517,22 +505,13 @@ local function openMenu()
         b.TextSize = 12
         b.TextXAlignment = Enum.TextXAlignment.Left
         b.BorderSizePixel = 0
-        b.BackgroundTransparency = 1
-        b.TextTransparency = 1
         b.Parent = Side
         Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
-        task.delay(0.12 + 0.06*i, function()
-            tween(b, {BackgroundTransparency = 0, TextTransparency = 0}, 0.25)
-        end)
         b.MouseEnter:Connect(function()
-            if not pages[name].Visible then
-                tween(b, {BackgroundColor3 = Color3.fromRGB(28,28,36)}, 0.1)
-            end
+            if not pages[name].Visible then tween(b, {BackgroundColor3 = Color3.fromRGB(28,28,36)}, 0.1) end
         end)
         b.MouseLeave:Connect(function()
-            if not pages[name].Visible then
-                tween(b, {BackgroundColor3 = Color3.fromRGB(12,12,16)}, 0.1)
-            end
+            if not pages[name].Visible then tween(b, {BackgroundColor3 = Color3.fromRGB(12,12,16)}, 0.1) end
         end)
         b.MouseButton1Click:Connect(function() switchTab(name, i) end)
         tabBtns[name] = b
@@ -559,10 +538,8 @@ local function openMenu()
         row.Size = UDim2.new(1, -6, 0, 30)
         row.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
         row.BorderSizePixel = 0
-        row.BackgroundTransparency = 0
         row.Parent = page
         Instance.new("UICorner", row).CornerRadius = UDim.new(0, 6)
-
         local name = Instance.new("TextLabel")
         name.Size = UDim2.new(1, -56, 1, 0)
         name.Position = UDim2.new(0, 12, 0, 0)
@@ -573,7 +550,6 @@ local function openMenu()
         name.TextSize = 12
         name.TextXAlignment = Enum.TextXAlignment.Left
         name.Parent = row
-
         local sw = Instance.new("TextButton")
         sw.Size = UDim2.new(0, 36, 0, 18)
         sw.Position = UDim2.new(1, -46, 0.5, -9)
@@ -582,7 +558,6 @@ local function openMenu()
         sw.BorderSizePixel = 0
         sw.Parent = row
         Instance.new("UICorner", sw).CornerRadius = UDim.new(1, 0)
-
         local knob = Instance.new("Frame")
         knob.Size = UDim2.new(0, 14, 0, 14)
         knob.Position = cfg[key] and UDim2.new(1,-16,0.5,-7) or UDim2.new(0,2,0.5,-7)
@@ -590,29 +565,12 @@ local function openMenu()
         knob.BorderSizePixel = 0
         knob.Parent = sw
         Instance.new("UICorner", knob).CornerRadius = UDim.new(1, 0)
-
-        row.MouseEnter:Connect(function()
-            tween(row, {BackgroundColor3 = Color3.fromRGB(30, 30, 42)}, 0.12)
-        end)
-        row.MouseLeave:Connect(function()
-            tween(row, {BackgroundColor3 = Color3.fromRGB(22, 22, 30)}, 0.12)
-        end)
-
+        row.MouseEnter:Connect(function() tween(row, {BackgroundColor3 = Color3.fromRGB(30, 30, 42)}, 0.12) end)
+        row.MouseLeave:Connect(function() tween(row, {BackgroundColor3 = Color3.fromRGB(22, 22, 30)}, 0.12) end)
         sw.MouseButton1Click:Connect(function()
             cfg[key] = not cfg[key]
             tween(sw, {BackgroundColor3 = cfg[key] and Color3.fromRGB(225,29,46) or Color3.fromRGB(50,50,62)}, 0.15)
             tween(knob, {Position = cfg[key] and UDim2.new(1,-16,0.5,-7) or UDim2.new(0,2,0.5,-7)}, 0.18, Enum.EasingStyle.Back)
-            if cfg[key] then
-                local flash = Instance.new("Frame")
-                flash.Size = UDim2.new(1, 0, 1, 0)
-                flash.BackgroundColor3 = Color3.fromRGB(225, 29, 46)
-                flash.BackgroundTransparency = 0.65
-                flash.BorderSizePixel = 0
-                flash.Parent = row
-                Instance.new("UICorner", flash).CornerRadius = UDim.new(0, 6)
-                tween(flash, {BackgroundTransparency = 1}, 0.4)
-                task.delay(0.45, function() flash:Destroy() end)
-            end
             if onChange then onChange(cfg[key]) end
         end)
     end
@@ -650,15 +608,12 @@ local function openMenu()
             b.MouseButton1Click:Connect(function()
                 cfg[key] = math.clamp(cfg[key] + d, minV, maxV)
                 lbl.Text = label .. ": " .. tostring(cfg[key])
-                tween(lbl, {TextColor3 = Color3.fromRGB(255,110,120)}, 0.08)
-                task.delay(0.15, function() tween(lbl, {TextColor3 = Color3.fromRGB(210,210,220)}, 0.2) end)
             end)
         end
         mk("-", -64, -step)
         mk("+", -32, step)
     end
 
-    -- Build tabs content
     section(pages["World"], "ENVIRONMENT")
     toggle(pages["World"], C, "Fullbright", "Fullbright", function(v) if not v then Lighting.Ambient=oldAmbient Lighting.Brightness=oldBrightness end end)
     toggle(pages["World"], C, "No Fog", "NoFog", function(v) if not v then Lighting.FogEnd=oldFog end end)
@@ -706,12 +661,8 @@ local function openMenu()
     toggle(pages["Games"], C.LT2, "Auto Sell", "AutoSell")
     toggle(pages["Games"], C.LT2, "Tree ESP", "ESP")
 
-    -- Show first tab with stagger
-    pages["World"].Visible = true
-    task.delay(0.35, function() animatePageIn(pages["World"]) end)
-
-    -- INSERT open/close with scale
-    local menuOpen = true
+    -- INSERT to open / close panel
+    local menuOpen = false
     UserInputService.InputBegan:Connect(function(input, gpe)
         if gpe then return end
         if input.KeyCode == Enum.KeyCode.Insert then
@@ -729,7 +680,7 @@ local function openMenu()
         end
     end)
 
-    print("[AznoCheats] main menu animations ready — INSERT to toggle")
+    print("[AznoCheats] unlocked — press INSERT to open the panel")
 end
 
 AuthBtn.MouseButton1Click:Connect(function()
@@ -748,8 +699,6 @@ AuthBtn.MouseButton1Click:Connect(function()
             task.wait(0.04)
         end
         AuthBg.Position = orig
-        tween(AuthStroke, {Transparency = 0.15}, 0.1)
-        task.delay(0.5, function() tween(AuthStroke, {Transparency = 0.5}, 0.3) end)
     end
 end)
 AuthBox.FocusLost:Connect(function(e) if e then AuthBtn.MouseButton1Click:Fire() end end)
