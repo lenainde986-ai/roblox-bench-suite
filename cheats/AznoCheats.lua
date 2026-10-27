@@ -1,5 +1,5 @@
 -- AznoCheats
--- Unified loader · Games tab · BSS + LT2
+-- Multi-tab pro menu · World / Character / Aim / Visuals / Games
 
 local AUTH_KEY = "CHANGE_ME_TO_YOUR_PRIVATE_KEY"
 local REMOTE_KEY_URL = ""
@@ -24,6 +24,7 @@ local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
 local VirtualUser = game:GetService("VirtualUser")
 local Camera = workspace.CurrentCamera
 
@@ -102,129 +103,51 @@ local function openMenu()
         VirtualUser:ClickButton2(Vector2.new())
     end)
 
-    -- Configs
     getgenv().Azno = getgenv().Azno or {
-        BSS = {
-            AutoFarm=false, AutoDig=false, AutoConvert=false,
-            CollectTokens=true, KillBugs=true,
-            ESP=true, ESP_Tokens=true, ESP_Bugs=true,
-            Speed=35, InfJump=false, Noclip=false, Loaded=false,
-        },
-        LT2 = {
-            AutoChop=false, AutoSell=false, Fly=false,
-            ESP=true, Speed=40, InfJump=false, Noclip=false, Loaded=false,
-        },
+        -- World
+        Fullbright = false, NoFog = false, XRay = false, TimeCycle = false, Gravity = false,
+        -- Character
+        Speed = 16, InfJump = false, Noclip = false, Fly = false, GodMode = false, InfStamina = false,
+        -- Aim
+        Aimbot = false, SilentAim = false, FOV = 120, Smooth = 5, TeamCheck = true, VisibleCheck = true, Triggerbot = false,
+        -- Visuals
+        ESP = false, BoxESP = false, NameESP = false, DistESP = false, Tracer = false, Chams = false,
+        -- Games
+        BSS = { AutoFarm=false, AutoDig=false, AutoConvert=false, CollectTokens=true, KillBugs=true, ESP=true, Loaded=false },
+        LT2 = { AutoChop=false, AutoSell=false, Fly=false, ESP=true, Loaded=false },
     }
-    local BSS = getgenv().Azno.BSS
-    local LT2 = getgenv().Azno.LT2
+    local C = getgenv().Azno
 
     local function getChar() return LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait() end
     local function getHum() local c=getChar() return c and c:FindFirstChildOfClass("Humanoid") end
     local function getRoot() local c=getChar() return c and c:FindFirstChild("HumanoidRootPart") end
 
-    -- ===== BSS logic =====
-    local function loadBSS()
-        if BSS.Loaded then return end
-        BSS.Loaded = true
-
-        RunService.Heartbeat:Connect(function()
-            if not BSS.Loaded then return end
-            local hum = getHum()
-            if hum and BSS.Speed > 16 then hum.WalkSpeed = BSS.Speed end
-            if BSS.Noclip then
-                local c = getChar()
-                if c then for _,p in pairs(c:GetDescendants()) do if p:IsA("BasePart") then p.CanCollide=false end end end
-            end
-        end)
-
-        UserInputService.JumpRequest:Connect(function()
-            if BSS.InfJump then local h=getHum() if h then h:ChangeState(Enum.HumanoidStateType.Jumping) end end
-        end)
-
-        local function dig()
-            local tool = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Tool")
-            if tool and tool:FindFirstChild("ClickEvent") then pcall(function() tool.ClickEvent:FireServer() end) end
+    -- World loops
+    local oldAmbient, oldBrightness, oldFog = Lighting.Ambient, Lighting.Brightness, Lighting.FogEnd
+    RunService.Heartbeat:Connect(function()
+        if C.Fullbright then
+            Lighting.Ambient = Color3.new(1,1,1)
+            Lighting.Brightness = 2
         end
+        if C.NoFog then Lighting.FogEnd = 1e6 end
+        if C.Gravity then
+            workspace.Gravity = 20
+        end
+        -- Character
+        local hum = getHum()
+        if hum and C.Speed > 16 then hum.WalkSpeed = C.Speed end
+        if C.Noclip then
+            local c = getChar()
+            if c then for _,p in pairs(c:GetDescendants()) do if p:IsA("BasePart") then p.CanCollide=false end end end
+        end
+        if C.GodMode and hum then hum.Health = hum.MaxHealth end
+    end)
 
-        RunService.Heartbeat:Connect(function() if BSS.AutoDig then dig() end end)
+    UserInputService.JumpRequest:Connect(function()
+        if C.InfJump then local h=getHum() if h then h:ChangeState(Enum.HumanoidStateType.Jumping) end end
+    end)
 
-        task.spawn(function()
-            while BSS.Loaded do
-                task.wait(1.5)
-                if BSS.AutoConvert then
-                    pcall(function() ReplicatedStorage.Events.PlayerActivesCommand:FireServer({["Name"]="Convert Pollens"}) end)
-                end
-            end
-        end)
-
-        task.spawn(function()
-            while BSS.Loaded do
-                task.wait(0.2)
-                if BSS.AutoFarm then
-                    local root = getRoot()
-                    if root and BSS.CollectTokens then
-                        local folder = workspace:FindFirstChild("Collectibles")
-                        if folder then
-                            for _,v in pairs(folder:GetChildren()) do
-                                local part = v:IsA("BasePart") and v or v:FindFirstChild("Handle")
-                                if part and (part.Position-root.Position).Magnitude < 40 then
-                                    root.CFrame = CFrame.new(part.Position + Vector3.new(0,3,0))
-                                    task.wait(0.05)
-                                end
-                            end
-                        end
-                    end
-                    if root and BSS.KillBugs then
-                        local monsters = workspace:FindFirstChild("Monsters")
-                        if monsters then
-                            for _,mob in pairs(monsters:GetChildren()) do
-                                local hrp = mob:FindFirstChild("HumanoidRootPart") or mob.PrimaryPart
-                                if hrp and (hrp.Position-root.Position).Magnitude < 80 then
-                                    root.CFrame = CFrame.new(hrp.Position + Vector3.new(0,8,0))
-                                    dig() task.wait(0.08)
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-
-        local drawings = {}
-        RunService.RenderStepped:Connect(function()
-            for _,d in pairs(drawings) do pcall(function() d:Remove() end) end
-            drawings = {}
-            if not BSS.ESP then return end
-            if BSS.ESP_Tokens and workspace:FindFirstChild("Collectibles") then
-                for _,v in pairs(workspace.Collectibles:GetChildren()) do
-                    local part = v:IsA("BasePart") and v or v:FindFirstChild("Handle")
-                    if part then
-                        local pos,on = Camera:WorldToViewportPoint(part.Position)
-                        if on then
-                            local t=Drawing.new("Text") t.Text=v.Name t.Size=14 t.Center=true t.Outline=true
-                            t.Color=Color3.fromRGB(255,220,50) t.Position=Vector2.new(pos.X,pos.Y) t.Visible=true
-                            table.insert(drawings,t)
-                        end
-                    end
-                end
-            end
-            if BSS.ESP_Bugs and workspace:FindFirstChild("Monsters") then
-                for _,mob in pairs(workspace.Monsters:GetChildren()) do
-                    local hrp = mob:FindFirstChild("HumanoidRootPart") or mob.PrimaryPart
-                    if hrp then
-                        local pos,on = Camera:WorldToViewportPoint(hrp.Position)
-                        if on then
-                            local t=Drawing.new("Text") t.Text=mob.Name t.Size=14 t.Center=true t.Outline=true
-                            t.Color=Color3.fromRGB(255,80,80) t.Position=Vector2.new(pos.X,pos.Y) t.Visible=true
-                            table.insert(drawings,t)
-                        end
-                    end
-                end
-            end
-        end)
-    end
-
-    -- ===== LT2 logic =====
+    -- Fly
     local flying, flyBV, flyBG = false, nil, nil
     local function stopFly()
         flying = false
@@ -245,7 +168,7 @@ local function openMenu()
         flyBG.P = 9e4
         flyBG.Parent = root
         RunService:BindToRenderStep("AznoFly", Enum.RenderPriority.Camera.Value, function()
-            if not LT2.Fly or not root.Parent then stopFly() return end
+            if not C.Fly or not root.Parent then stopFly() return end
             local cam = Camera.CFrame
             local dir = Vector3.zero
             if UserInputService:IsKeyDown(Enum.KeyCode.W) then dir = dir + cam.LookVector end
@@ -259,28 +182,130 @@ local function openMenu()
         end)
     end
 
-    local function loadLT2()
-        if LT2.Loaded then return end
-        LT2.Loaded = true
+    -- Player ESP
+    local pDraws = {}
+    RunService.RenderStepped:Connect(function()
+        for _,d in pairs(pDraws) do pcall(function() d:Remove() end) end
+        pDraws = {}
+        if not C.ESP then return end
+        for _, plr in pairs(Players:GetPlayers()) do
+            if plr ~= LocalPlayer and plr.Character then
+                local hrp = plr.Character:FindFirstChild("HumanoidRootPart")
+                local hum = plr.Character:FindFirstChildOfClass("Humanoid")
+                if hrp and hum and hum.Health > 0 then
+                    local pos, on = Camera:WorldToViewportPoint(hrp.Position)
+                    if on then
+                        if C.NameESP then
+                            local t = Drawing.new("Text")
+                            t.Text = plr.Name
+                            t.Size = 13 t.Center = true t.Outline = true
+                            t.Color = Color3.fromRGB(255,80,80)
+                            t.Position = Vector2.new(pos.X, pos.Y - 20)
+                            t.Visible = true
+                            table.insert(pDraws, t)
+                        end
+                        if C.DistESP then
+                            local dist = math.floor((hrp.Position - (getRoot() and getRoot().Position or hrp.Position)).Magnitude)
+                            local t = Drawing.new("Text")
+                            t.Text = dist .. "m"
+                            t.Size = 12 t.Center = true t.Outline = true
+                            t.Color = Color3.fromRGB(200,200,200)
+                            t.Position = Vector2.new(pos.X, pos.Y)
+                            t.Visible = true
+                            table.insert(pDraws, t)
+                        end
+                        if C.Tracer then
+                            local line = Drawing.new("Line")
+                            line.From = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y)
+                            line.To = Vector2.new(pos.X, pos.Y)
+                            line.Color = Color3.fromRGB(225,29,46)
+                            line.Thickness = 1 line.Visible = true
+                            table.insert(pDraws, line)
+                        end
+                    end
+                end
+            end
+        end
+    end)
 
-        RunService.Heartbeat:Connect(function()
-            if not LT2.Loaded then return end
-            local hum = getHum()
-            if hum and LT2.Speed > 16 then hum.WalkSpeed = LT2.Speed end
-            if LT2.Noclip then
-                local c = getChar()
-                if c then for _,p in pairs(c:GetDescendants()) do if p:IsA("BasePart") then p.CanCollide=false end end end
+    -- BSS
+    local function loadBSS()
+        if C.BSS.Loaded then return end
+        C.BSS.Loaded = true
+        local function dig()
+            local tool = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Tool")
+            if tool and tool:FindFirstChild("ClickEvent") then pcall(function() tool.ClickEvent:FireServer() end) end
+        end
+        RunService.Heartbeat:Connect(function() if C.BSS.AutoDig then dig() end end)
+        task.spawn(function()
+            while C.BSS.Loaded do
+                task.wait(1.5)
+                if C.BSS.AutoConvert then
+                    pcall(function() ReplicatedStorage.Events.PlayerActivesCommand:FireServer({["Name"]="Convert Pollens"}) end)
+                end
             end
         end)
-
-        UserInputService.JumpRequest:Connect(function()
-            if LT2.InfJump then local h=getHum() if h then h:ChangeState(Enum.HumanoidStateType.Jumping) end end
-        end)
-
         task.spawn(function()
-            while LT2.Loaded do
+            while C.BSS.Loaded do
+                task.wait(0.2)
+                if C.BSS.AutoFarm then
+                    local root = getRoot()
+                    if root and C.BSS.CollectTokens then
+                        local folder = workspace:FindFirstChild("Collectibles")
+                        if folder then
+                            for _,v in pairs(folder:GetChildren()) do
+                                local part = v:IsA("BasePart") and v or v:FindFirstChild("Handle")
+                                if part and (part.Position-root.Position).Magnitude < 40 then
+                                    root.CFrame = CFrame.new(part.Position+Vector3.new(0,3,0))
+                                    task.wait(0.05)
+                                end
+                            end
+                        end
+                    end
+                    if root and C.BSS.KillBugs then
+                        local monsters = workspace:FindFirstChild("Monsters")
+                        if monsters then
+                            for _,mob in pairs(monsters:GetChildren()) do
+                                local hrp = mob:FindFirstChild("HumanoidRootPart") or mob.PrimaryPart
+                                if hrp and (hrp.Position-root.Position).Magnitude < 80 then
+                                    root.CFrame = CFrame.new(hrp.Position+Vector3.new(0,8,0))
+                                    dig() task.wait(0.08)
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+        local d = {}
+        RunService.RenderStepped:Connect(function()
+            for _,x in pairs(d) do pcall(function() x:Remove() end) end
+            d = {}
+            if not C.BSS.ESP then return end
+            if workspace:FindFirstChild("Collectibles") then
+                for _,v in pairs(workspace.Collectibles:GetChildren()) do
+                    local part = v:IsA("BasePart") and v or v:FindFirstChild("Handle")
+                    if part then
+                        local pos,on = Camera:WorldToViewportPoint(part.Position)
+                        if on then
+                            local t=Drawing.new("Text") t.Text=v.Name t.Size=14 t.Center=true t.Outline=true
+                            t.Color=Color3.fromRGB(255,220,50) t.Position=Vector2.new(pos.X,pos.Y) t.Visible=true
+                            table.insert(d,t)
+                        end
+                    end
+                end
+            end
+        end)
+    end
+
+    -- LT2
+    local function loadLT2()
+        if C.LT2.Loaded then return end
+        C.LT2.Loaded = true
+        task.spawn(function()
+            while C.LT2.Loaded do
                 task.wait(0.15)
-                if LT2.AutoChop then
+                if C.LT2.AutoChop then
                     local root = getRoot()
                     if root then
                         local closest, dist = nil, 200
@@ -288,15 +313,15 @@ local function openMenu()
                             if tree.Name:match("Tree") or tree.Name:match("Wood") or tree:FindFirstChild("CutEvent") then
                                 local part = tree:IsA("BasePart") and tree or tree.PrimaryPart or tree:FindFirstChildWhichIsA("BasePart")
                                 if part then
-                                    local d = (part.Position - root.Position).Magnitude
-                                    if d < dist then closest = tree dist = d end
+                                    local dd = (part.Position-root.Position).Magnitude
+                                    if dd < dist then closest=tree dist=dd end
                                 end
                             end
                         end
                         if closest then
                             local part = closest.PrimaryPart or closest:FindFirstChildWhichIsA("BasePart")
                             if part then
-                                root.CFrame = CFrame.new(part.Position + Vector3.new(0,5,0))
+                                root.CFrame = CFrame.new(part.Position+Vector3.new(0,5,0))
                                 pcall(function()
                                     if closest:FindFirstChild("CutEvent") then closest.CutEvent:FireServer() end
                                     if ReplicatedStorage:FindFirstChild("Remotes") and ReplicatedStorage.Remotes:FindFirstChild("Cut") then
@@ -309,11 +334,10 @@ local function openMenu()
                 end
             end
         end)
-
         task.spawn(function()
-            while LT2.Loaded do
+            while C.LT2.Loaded do
                 task.wait(3)
-                if LT2.AutoSell then
+                if C.LT2.AutoSell then
                     pcall(function()
                         if ReplicatedStorage:FindFirstChild("Remotes") and ReplicatedStorage.Remotes:FindFirstChild("SellWood") then
                             ReplicatedStorage.Remotes.SellWood:FireServer()
@@ -322,13 +346,12 @@ local function openMenu()
                 end
             end
         end)
-
-        local drawings = {}
+        local d = {}
         RunService.RenderStepped:Connect(function()
-            for _,d in pairs(drawings) do pcall(function() d:Remove() end) end
-            drawings = {}
-            if not LT2.ESP then return end
-            for _, obj in pairs(workspace:GetDescendants()) do
+            for _,x in pairs(d) do pcall(function() x:Remove() end) end
+            d = {}
+            if not C.LT2.ESP then return end
+            for _,obj in pairs(workspace:GetDescendants()) do
                 if obj.Name:match("Tree") or obj.Name:match("Wood") then
                     local part = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
                     if part then
@@ -336,7 +359,7 @@ local function openMenu()
                         if on and pos.Z > 0 then
                             local t=Drawing.new("Text") t.Text=obj.Name t.Size=13 t.Center=true t.Outline=true
                             t.Color=Color3.fromRGB(80,255,120) t.Position=Vector2.new(pos.X,pos.Y) t.Visible=true
-                            table.insert(drawings,t)
+                            table.insert(d,t)
                         end
                     end
                 end
@@ -352,8 +375,8 @@ local function openMenu()
     Gui.Parent = game:GetService("CoreGui")
 
     local Main = Instance.new("Frame")
-    Main.Size = UDim2.new(0, 540, 0, 360)
-    Main.Position = UDim2.new(0.5, -270, 0.5, -180)
+    Main.Size = UDim2.new(0, 560, 0, 380)
+    Main.Position = UDim2.new(0.5, -280, 0.5, -190)
     Main.BackgroundColor3 = Color3.fromRGB(16, 16, 22)
     Main.BorderSizePixel = 0
     Main.Active = true
@@ -365,9 +388,8 @@ local function openMenu()
     Stroke.Thickness = 1
     Stroke.Parent = Main
 
-    -- Sidebar
     local Side = Instance.new("Frame")
-    Side.Size = UDim2.new(0, 140, 1, 0)
+    Side.Size = UDim2.new(0, 130, 1, 0)
     Side.BackgroundColor3 = Color3.fromRGB(12, 12, 16)
     Side.BorderSizePixel = 0
     Side.Parent = Main
@@ -380,50 +402,73 @@ local function openMenu()
     SideFix.Parent = Side
 
     local Logo = Instance.new("TextLabel")
-    Logo.Size = UDim2.new(1, 0, 0, 48)
+    Logo.Size = UDim2.new(1, 0, 0, 44)
     Logo.BackgroundTransparency = 1
     Logo.Text = "AZNOCHEATS"
     Logo.TextColor3 = Color3.fromRGB(225, 29, 46)
     Logo.Font = Enum.Font.GothamBold
-    Logo.TextSize = 13
+    Logo.TextSize = 12
     Logo.Parent = Side
 
-    -- Only one tab: Games
-    local GamesBtn = Instance.new("TextButton")
-    GamesBtn.Size = UDim2.new(1, -16, 0, 34)
-    GamesBtn.Position = UDim2.new(0, 8, 0, 52)
-    GamesBtn.BackgroundColor3 = Color3.fromRGB(225, 29, 46)
-    GamesBtn.Text = "  Games"
-    GamesBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    GamesBtn.Font = Enum.Font.GothamMedium
-    GamesBtn.TextSize = 13
-    GamesBtn.TextXAlignment = Enum.TextXAlignment.Left
-    GamesBtn.BorderSizePixel = 0
-    GamesBtn.Parent = Side
-    Instance.new("UICorner", GamesBtn).CornerRadius = UDim.new(0, 6)
+    local tabs = {"World", "Character", "Aim", "Visuals", "Games"}
+    local tabBtns, pages = {}, {}
 
-    -- Content
-    local Content = Instance.new("ScrollingFrame")
-    Content.Size = UDim2.new(1, -156, 1, -16)
-    Content.Position = UDim2.new(0, 148, 0, 8)
+    local Content = Instance.new("Frame")
+    Content.Size = UDim2.new(1, -140, 1, -12)
+    Content.Position = UDim2.new(0, 136, 0, 6)
     Content.BackgroundTransparency = 1
-    Content.BorderSizePixel = 0
-    Content.ScrollBarThickness = 3
-    Content.ScrollBarImageColor3 = Color3.fromRGB(225, 29, 46)
-    Content.AutomaticCanvasSize = Enum.AutomaticSize.Y
-    Content.CanvasSize = UDim2.new(0,0,0,0)
     Content.Parent = Main
-    local Lay = Instance.new("UIListLayout")
-    Lay.Padding = UDim.new(0, 8)
-    Lay.Parent = Content
 
-    local function section(title)
+    local function makePage(name)
+        local p = Instance.new("ScrollingFrame")
+        p.Size = UDim2.new(1, 0, 1, 0)
+        p.BackgroundTransparency = 1
+        p.BorderSizePixel = 0
+        p.ScrollBarThickness = 3
+        p.ScrollBarImageColor3 = Color3.fromRGB(225, 29, 46)
+        p.AutomaticCanvasSize = Enum.AutomaticSize.Y
+        p.CanvasSize = UDim2.new(0,0,0,0)
+        p.Visible = false
+        p.Parent = Content
+        Instance.new("UIListLayout", p).Padding = UDim.new(0, 6)
+        pages[name] = p
+        return p
+    end
+    for _,n in ipairs(tabs) do makePage(n) end
+    pages["World"].Visible = true
+
+    local function switchTab(name)
+        for n,p in pairs(pages) do p.Visible = (n==name) end
+        for n,b in pairs(tabBtns) do
+            b.BackgroundColor3 = (n==name) and Color3.fromRGB(225,29,46) or Color3.fromRGB(12,12,16)
+            b.TextColor3 = (n==name) and Color3.fromRGB(255,255,255) or Color3.fromRGB(140,140,155)
+        end
+    end
+
+    for i,name in ipairs(tabs) do
+        local b = Instance.new("TextButton")
+        b.Size = UDim2.new(1, -14, 0, 32)
+        b.Position = UDim2.new(0, 7, 0, 48+(i-1)*38)
+        b.BackgroundColor3 = (i==1) and Color3.fromRGB(225,29,46) or Color3.fromRGB(12,12,16)
+        b.Text = "  "..name
+        b.TextColor3 = (i==1) and Color3.fromRGB(255,255,255) or Color3.fromRGB(140,140,155)
+        b.Font = Enum.Font.GothamMedium
+        b.TextSize = 12
+        b.TextXAlignment = Enum.TextXAlignment.Left
+        b.BorderSizePixel = 0
+        b.Parent = Side
+        Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
+        b.MouseButton1Click:Connect(function() switchTab(name) end)
+        tabBtns[name] = b
+    end
+
+    local function section(page, title)
         local f = Instance.new("Frame")
         f.Size = UDim2.new(1, -6, 0, 20)
         f.BackgroundTransparency = 1
-        f.Parent = Content
+        f.Parent = page
         local l = Instance.new("TextLabel")
-        l.Size = UDim2.new(1, 0, 1, 0)
+        l.Size = UDim2.new(1,0,1,0)
         l.BackgroundTransparency = 1
         l.Text = title
         l.TextColor3 = Color3.fromRGB(225, 29, 46)
@@ -433,14 +478,13 @@ local function openMenu()
         l.Parent = f
     end
 
-    local function toggle(cfg, label, key, onChange)
+    local function toggle(page, cfg, label, key, onChange)
         local row = Instance.new("Frame")
         row.Size = UDim2.new(1, -6, 0, 30)
         row.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
         row.BorderSizePixel = 0
-        row.Parent = Content
+        row.Parent = page
         Instance.new("UICorner", row).CornerRadius = UDim.new(0, 6)
-
         local name = Instance.new("TextLabel")
         name.Size = UDim2.new(1, -56, 1, 0)
         name.Position = UDim2.new(0, 12, 0, 0)
@@ -451,7 +495,6 @@ local function openMenu()
         name.TextSize = 12
         name.TextXAlignment = Enum.TextXAlignment.Left
         name.Parent = row
-
         local sw = Instance.new("TextButton")
         sw.Size = UDim2.new(0, 36, 0, 18)
         sw.Position = UDim2.new(1, -46, 0.5, -9)
@@ -460,7 +503,6 @@ local function openMenu()
         sw.BorderSizePixel = 0
         sw.Parent = row
         Instance.new("UICorner", sw).CornerRadius = UDim.new(1, 0)
-
         local knob = Instance.new("Frame")
         knob.Size = UDim2.new(0, 14, 0, 14)
         knob.Position = cfg[key] and UDim2.new(1,-16,0.5,-7) or UDim2.new(0,2,0.5,-7)
@@ -468,7 +510,6 @@ local function openMenu()
         knob.BorderSizePixel = 0
         knob.Parent = sw
         Instance.new("UICorner", knob).CornerRadius = UDim.new(1, 0)
-
         sw.MouseButton1Click:Connect(function()
             cfg[key] = not cfg[key]
             sw.BackgroundColor3 = cfg[key] and Color3.fromRGB(225,29,46) or Color3.fromRGB(50,50,62)
@@ -479,18 +520,18 @@ local function openMenu()
         end)
     end
 
-    local function speedRow(cfg, label)
+    local function numRow(page, cfg, label, key, minV, maxV, step)
         local row = Instance.new("Frame")
         row.Size = UDim2.new(1, -6, 0, 30)
         row.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
         row.BorderSizePixel = 0
-        row.Parent = Content
+        row.Parent = page
         Instance.new("UICorner", row).CornerRadius = UDim.new(0, 6)
         local lbl = Instance.new("TextLabel")
         lbl.Size = UDim2.new(0.5, 0, 1, 0)
         lbl.Position = UDim2.new(0, 12, 0, 0)
         lbl.BackgroundTransparency = 1
-        lbl.Text = label .. ": " .. cfg.Speed
+        lbl.Text = label .. ": " .. tostring(cfg[key])
         lbl.TextColor3 = Color3.fromRGB(210, 210, 220)
         lbl.Font = Enum.Font.Gotham
         lbl.TextSize = 12
@@ -508,38 +549,71 @@ local function openMenu()
             b.Parent = row
             Instance.new("UICorner", b).CornerRadius = UDim.new(0, 4)
             b.MouseButton1Click:Connect(function()
-                cfg.Speed = math.clamp(cfg.Speed + d, 16, 120)
-                lbl.Text = label .. ": " .. cfg.Speed
+                cfg[key] = math.clamp(cfg[key] + d, minV, maxV)
+                lbl.Text = label .. ": " .. tostring(cfg[key])
             end)
         end
-        mk("-", -64, -5)
-        mk("+", -32, 5)
+        mk("-", -64, -step)
+        mk("+", -32, step)
     end
 
-    -- Games content
-    section("BEE SWARM SIMULATOR")
-    toggle(BSS, "Load BSS", "Loaded", function(v) if v then loadBSS() end end)
-    toggle(BSS, "Auto Farm", "AutoFarm")
-    toggle(BSS, "Auto Dig", "AutoDig")
-    toggle(BSS, "Auto Convert", "AutoConvert")
-    toggle(BSS, "Collect Tokens", "CollectTokens")
-    toggle(BSS, "Kill Bugs", "KillBugs")
-    toggle(BSS, "ESP", "ESP")
-    toggle(BSS, "Token ESP", "ESP_Tokens")
-    toggle(BSS, "Bug ESP", "ESP_Bugs")
-    toggle(BSS, "Infinite Jump", "InfJump")
-    toggle(BSS, "Noclip", "Noclip")
-    speedRow(BSS, "Speed")
+    -- WORLD
+    section(pages["World"], "ENVIRONMENT")
+    toggle(pages["World"], C, "Fullbright", "Fullbright", function(v)
+        if not v then Lighting.Ambient=oldAmbient Lighting.Brightness=oldBrightness end
+    end)
+    toggle(pages["World"], C, "No Fog", "NoFog", function(v)
+        if not v then Lighting.FogEnd=oldFog end
+    end)
+    toggle(pages["World"], C, "X-Ray (translucent)", "XRay")
+    toggle(pages["World"], C, "Low Gravity", "Gravity", function(v)
+        workspace.Gravity = v and 20 or 196.2
+    end)
 
-    section("LUMBER TYCOON 2")
-    toggle(LT2, "Load LT2", "Loaded", function(v) if v then loadLT2() end end)
-    toggle(LT2, "Auto Chop", "AutoChop")
-    toggle(LT2, "Auto Sell", "AutoSell")
-    toggle(LT2, "Fly", "Fly", function(v) if v then startFly() else stopFly() end end)
-    toggle(LT2, "Tree ESP", "ESP")
-    toggle(LT2, "Infinite Jump", "InfJump")
-    toggle(LT2, "Noclip", "Noclip")
-    speedRow(LT2, "Speed")
+    -- CHARACTER
+    section(pages["Character"], "MOVEMENT")
+    toggle(pages["Character"], C, "Fly", "Fly", function(v) if v then startFly() else stopFly() end end)
+    toggle(pages["Character"], C, "Infinite Jump", "InfJump")
+    toggle(pages["Character"], C, "Noclip", "Noclip")
+    numRow(pages["Character"], C, "Speed", "Speed", 16, 150, 5)
+    section(pages["Character"], "PROTECTION")
+    toggle(pages["Character"], C, "God Mode", "GodMode")
+    toggle(pages["Character"], C, "Inf Stamina", "InfStamina")
+
+    -- AIM
+    section(pages["Aim"], "AIMBOT")
+    toggle(pages["Aim"], C, "Aimbot", "Aimbot")
+    toggle(pages["Aim"], C, "Silent Aim", "SilentAim")
+    toggle(pages["Aim"], C, "Triggerbot", "Triggerbot")
+    toggle(pages["Aim"], C, "Team Check", "TeamCheck")
+    toggle(pages["Aim"], C, "Visible Check", "VisibleCheck")
+    numRow(pages["Aim"], C, "FOV", "FOV", 20, 360, 10)
+    numRow(pages["Aim"], C, "Smooth", "Smooth", 1, 20, 1)
+
+    -- VISUALS
+    section(pages["Visuals"], "PLAYER ESP")
+    toggle(pages["Visuals"], C, "Enable ESP", "ESP")
+    toggle(pages["Visuals"], C, "Box ESP", "BoxESP")
+    toggle(pages["Visuals"], C, "Name ESP", "NameESP")
+    toggle(pages["Visuals"], C, "Distance ESP", "DistESP")
+    toggle(pages["Visuals"], C, "Tracers", "Tracer")
+    toggle(pages["Visuals"], C, "Chams", "Chams")
+
+    -- GAMES
+    section(pages["Games"], "BEE SWARM SIMULATOR")
+    toggle(pages["Games"], C.BSS, "Load BSS", "Loaded", function(v) if v then loadBSS() end end)
+    toggle(pages["Games"], C.BSS, "Auto Farm", "AutoFarm")
+    toggle(pages["Games"], C.BSS, "Auto Dig", "AutoDig")
+    toggle(pages["Games"], C.BSS, "Auto Convert", "AutoConvert")
+    toggle(pages["Games"], C.BSS, "Collect Tokens", "CollectTokens")
+    toggle(pages["Games"], C.BSS, "Kill Bugs", "KillBugs")
+    toggle(pages["Games"], C.BSS, "BSS ESP", "ESP")
+
+    section(pages["Games"], "LUMBER TYCOON 2")
+    toggle(pages["Games"], C.LT2, "Load LT2", "Loaded", function(v) if v then loadLT2() end end)
+    toggle(pages["Games"], C.LT2, "Auto Chop", "AutoChop")
+    toggle(pages["Games"], C.LT2, "Auto Sell", "AutoSell")
+    toggle(pages["Games"], C.LT2, "Tree ESP", "ESP")
 
     UserInputService.InputBegan:Connect(function(input, gpe)
         if gpe then return end
@@ -548,7 +622,7 @@ local function openMenu()
         end
     end)
 
-    print("[AznoCheats] loaded — Games tab · INSERT to toggle")
+    print("[AznoCheats] multi-tab loaded — INSERT to toggle")
 end
 
 AuthBtn.MouseButton1Click:Connect(function()
