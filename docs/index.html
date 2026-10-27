@@ -7,294 +7,155 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #070709;
-    --surface: #0e0e12;
-    --surface2: #14141a;
-    --border: #1f1f28;
-    --text: #f0f0f5;
-    --muted: #8b8b9a;
-    --red: #e11d2e;
-    --red-bright: #ff2a3d;
-    --red-dim: rgba(225, 29, 46, 0.15);
-    --red-glow: rgba(225, 29, 46, 0.35);
+    --bg: #070709; --surface: #0e0e12; --surface2: #14141a; --border: #1f1f28;
+    --text: #f0f0f5; --muted: #8b8b9a;
+    --red: #e11d2e; --red-bright: #ff2a3d; --red-dim: rgba(225,29,46,0.15); --red-glow: rgba(225,29,46,0.35);
     --green: #22c55e;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    font-family: 'Inter', system-ui, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.5;
-    overflow-x: hidden;
-  }
-
-  /* grid bg */
+  body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.5; overflow-x:hidden; }
   .grid-bg {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background-image:
-      linear-gradient(rgba(225,29,46,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(225,29,46,0.03) 1px, transparent 1px);
-    background-size: 48px 48px;
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image: linear-gradient(rgba(225,29,46,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(225,29,46,0.03) 1px, transparent 1px);
+    background-size:48px 48px;
     mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 20%, transparent 75%);
   }
+  header { position:sticky; top:0; z-index:100; background:rgba(7,7,9,0.85); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+  .nav-top { max-width:1200px; margin:0 auto; padding:0.75rem 1.5rem; display:flex; align-items:center; justify-content:space-between; }
+  .logo { font-family:'JetBrains Mono',monospace; font-weight:700; font-size:1.15rem; letter-spacing:0.04em; display:flex; align-items:center; gap:0.5rem; }
+  .logo-icon { width:28px; height:28px; border-radius:6px; background:linear-gradient(135deg,var(--red),#9b1220); display:grid; place-items:center; font-size:14px; }
+  .logo span { color:var(--red-bright); }
+  .nav-links { display:flex; gap:1.5rem; align-items:center; }
+  .nav-links a { color:var(--muted); text-decoration:none; font-size:0.875rem; font-weight:500; }
+  .nav-links a:hover { color:var(--text); }
+  .btn-red { background:var(--red); color:#fff; border:none; padding:0.5rem 1.1rem; border-radius:8px; font-weight:600; font-size:0.875rem; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; transition:background 0.15s, box-shadow 0.15s; }
+  .btn-red:hover { background:var(--red-bright); box-shadow:0 0 20px var(--red-glow); }
+  .btn-outline { background:transparent; color:var(--text); border:1px solid var(--border); padding:0.5rem 1.1rem; border-radius:8px; font-weight:500; font-size:0.875rem; text-decoration:none; }
+  .btn-outline:hover { border-color:var(--red); background:var(--red-dim); }
 
-  /* header */
-  header {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(7,7,9,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-top {
-    max-width: 1200px; margin: 0 auto;
-    padding: 0.75rem 1.5rem;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .logo {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 700; font-size: 1.15rem;
-    letter-spacing: 0.04em;
-    display: flex; align-items: center; gap: 0.5rem;
-  }
-  .logo-icon {
-    width: 28px; height: 28px; border-radius: 6px;
-    background: linear-gradient(135deg, var(--red), #9b1220);
-    display: grid; place-items: center;
-    font-size: 14px;
-  }
-  .logo span { color: var(--red-bright); }
-  .nav-links { display: flex; gap: 1.5rem; align-items: center; }
-  .nav-links a {
-    color: var(--muted); text-decoration: none; font-size: 0.875rem; font-weight: 500;
-    transition: color 0.15s;
-  }
-  .nav-links a:hover { color: var(--text); }
-  .btn-red {
-    background: var(--red); color: #fff; border: none;
-    padding: 0.5rem 1.1rem; border-radius: 8px;
-    font-weight: 600; font-size: 0.875rem; cursor: pointer;
-    text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem;
-    transition: background 0.15s, box-shadow 0.15s;
-  }
-  .btn-red:hover { background: var(--red-bright); box-shadow: 0 0 20px var(--red-glow); }
-  .btn-outline {
-    background: transparent; color: var(--text);
-    border: 1px solid var(--border); padding: 0.5rem 1.1rem; border-radius: 8px;
-    font-weight: 500; font-size: 0.875rem; cursor: pointer; text-decoration: none;
-    transition: border-color 0.15s, background 0.15s;
-  }
-  .btn-outline:hover { border-color: var(--red); background: var(--red-dim); }
+  .hero { position:relative; z-index:1; max-width:1200px; margin:0 auto; padding:5rem 1.5rem 3rem; text-align:center; }
+  .hero-title { font-size:clamp(3rem,8vw,5.5rem); font-weight:800; letter-spacing:-0.03em; line-height:1; background:linear-gradient(180deg,#fff 30%,var(--red-bright)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; filter:drop-shadow(0 0 40px var(--red-glow)); margin-bottom:0.25rem; }
+  .hero-sub { font-size:clamp(1rem,2.5vw,1.35rem); font-weight:500; letter-spacing:0.35em; color:var(--muted); text-transform:uppercase; margin-bottom:1.75rem; }
+  .stats-bar { display:inline-flex; flex-wrap:wrap; gap:0.35rem 1.25rem; background:var(--surface); border:1px solid var(--border); border-radius:999px; padding:0.55rem 1.25rem; font-size:0.8rem; color:var(--muted); margin-bottom:2rem; }
+  .stats-bar strong { color:var(--text); font-weight:600; }
+  .stats-bar .sep { color:var(--border); }
+  .hero-actions { display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap; }
 
-  /* hero */
-  .hero {
-    position: relative; z-index: 1;
-    max-width: 1200px; margin: 0 auto;
-    padding: 5rem 1.5rem 3rem;
-    text-align: center;
-  }
-  .hero-title {
-    font-size: clamp(3rem, 8vw, 5.5rem);
-    font-weight: 800; letter-spacing: -0.03em;
-    line-height: 1;
-    background: linear-gradient(180deg, #fff 30%, var(--red-bright));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 0 40px var(--red-glow));
-    margin-bottom: 0.25rem;
-  }
-  .hero-sub {
-    font-size: clamp(1rem, 2.5vw, 1.4rem);
-    font-weight: 500; letter-spacing: 0.35em;
-    color: var(--muted); text-transform: uppercase;
-    margin-bottom: 1.75rem;
-  }
-  .stats-bar {
-    display: inline-flex; flex-wrap: wrap; gap: 0.35rem 1.25rem;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 999px; padding: 0.55rem 1.25rem;
-    font-size: 0.8rem; color: var(--muted);
-    margin-bottom: 2rem;
-  }
-  .stats-bar strong { color: var(--text); font-weight: 600; }
-  .stats-bar .sep { color: var(--border); }
-  .hero-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+  .section { position:relative; z-index:1; max-width:1200px; margin:0 auto; padding:2.5rem 1.5rem; }
+  .section-label { font-size:0.75rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--red); margin-bottom:0.4rem; }
+  .section-title { font-size:1.75rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:0.5rem; }
+  .section-desc { color:var(--muted); font-size:0.95rem; margin-bottom:1.75rem; max-width:520px; }
 
-  /* sections */
-  .section {
-    position: relative; z-index: 1;
-    max-width: 1200px; margin: 0 auto;
-    padding: 2.5rem 1.5rem;
+  /* main interactive preview */
+  .menu-preview {
+    background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden;
+    max-width:640px;
   }
-  .section-label {
-    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--red);
-    margin-bottom: 0.4rem;
+  .menu-bar {
+    padding:0.55rem 1rem; background:var(--surface2); border-bottom:1px solid var(--border);
+    font-size:0.72rem; font-family:'JetBrains Mono',monospace; color:var(--muted);
+    display:flex; justify-content:space-between; align-items:center;
   }
-  .section-title {
-    font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em;
-    margin-bottom: 0.5rem;
-  }
-  .section-desc { color: var(--muted); font-size: 0.95rem; margin-bottom: 1.75rem; max-width: 520px; }
+  .live { color:var(--green); font-size:0.65rem; font-weight:700; letter-spacing:0.06em; }
+  .menu-stage { padding:1.5rem; background:#0a0a0e; display:flex; justify-content:center; }
 
-  /* product cards */
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1rem;
-  }
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-    cursor: default;
-  }
-  .card:hover {
-    border-color: rgba(225,29,46,0.4);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 30px var(--red-dim);
-  }
-  .card-img {
-    height: 120px;
-    background: linear-gradient(135deg, #1a0a0c 0%, #2a1015 50%, #1a0a0c 100%);
-    display: grid; place-items: center;
-    position: relative;
-    border-bottom: 1px solid var(--border);
-  }
-  .card-img span {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 700; font-size: 1.4rem;
-    color: rgba(255,255,255,0.15);
-    letter-spacing: 0.05em;
-  }
-  .card-badge {
-    position: absolute; top: 10px; left: 10px;
-    background: var(--red-dim); color: var(--red-bright);
-    font-size: 0.65rem; font-weight: 600; padding: 0.2rem 0.5rem;
-    border-radius: 4px; border: 1px solid rgba(225,29,46,0.3);
-  }
-  .card-body { padding: 1rem 1.1rem 1.15rem; }
-  .card-body h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
-  .card-body p { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.75rem; }
-  .card-foot { display: flex; justify-content: space-between; align-items: center; }
-  .price { font-weight: 700; color: var(--red-bright); font-size: 0.95rem; }
-  .status-pill {
-    font-size: 0.7rem; font-weight: 600;
-    padding: 0.2rem 0.5rem; border-radius: 999px;
-    background: rgba(34,197,94,0.12); color: var(--green);
-  }
-
-  /* interactive previews */
-  .preview-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-    gap: 1.25rem;
-  }
-  .preview-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .preview-bar {
-    padding: 0.55rem 0.9rem;
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border);
-    font-size: 0.72rem; font-family: 'JetBrains Mono', monospace;
-    color: var(--muted);
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .live {
-    color: var(--green); font-size: 0.65rem; font-weight: 700;
-    letter-spacing: 0.06em;
-  }
-  .preview-stage {
-    padding: 1.5rem;
-    min-height: 300px;
-    display: flex; align-items: center; justify-content: center;
-    background: #0a0a0e;
-  }
-
-  /* fake windows */
+  /* fake pro menu */
   .win {
-    width: 100%; max-width: 260px;
-    border-radius: 8px; overflow: hidden;
-    border: 1px solid #2a2a35;
-    box-shadow: 0 16px 50px rgba(0,0,0,0.55);
-    user-select: none;
+    width:100%; max-width:520px; height:340px;
+    border-radius:10px; overflow:hidden;
+    border:1px solid #2a2a35;
+    box-shadow:0 20px 60px rgba(0,0,0,0.55);
+    display:flex; background:#101016; user-select:none;
   }
-  .win-title {
-    padding: 8px 12px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11.5px; font-weight: 600; color: #fff;
-    background: #1e1e28;
+  .side {
+    width:130px; background:#0c0c10; padding:0; flex-shrink:0;
+    border-right:1px solid #1a1a22;
+    display:flex; flex-direction:column;
   }
-  .win-body { padding: 10px 12px 12px; background: #121218; }
-  .win-lt2 .win-title { background: #1a221c; }
-  .win-lt2 .win-body { background: #0e1410; }
+  .side-logo {
+    height:48px; display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono',monospace; font-weight:700; font-size:11px;
+    color:var(--red-bright); letter-spacing:0.04em;
+  }
+  .side-tab {
+    margin:0 8px; padding:9px 12px; border-radius:6px;
+    font-size:12.5px; font-weight:500; color:#fff;
+    background:var(--red); cursor:default;
+  }
+  .body { flex:1; overflow-y:auto; padding:10px 12px; }
+  .body::-webkit-scrollbar { width:4px; }
+  .body::-webkit-scrollbar-thumb { background:var(--red); border-radius:4px; }
 
-  .tbtn {
-    width: 100%; padding: 7px 10px; margin-bottom: 5px;
-    border: none; border-radius: 5px;
-    font-size: 12px; font-family: 'Inter', sans-serif;
-    cursor: pointer; text-align: left; color: #ccc;
-    background: #1c1c26; transition: background 0.12s, transform 0.08s;
+  .sec {
+    font-size:10.5px; font-weight:700; color:var(--red);
+    letter-spacing:0.06em; margin:10px 0 6px 2px;
   }
-  .tbtn:active { transform: scale(0.98); }
-  .tbtn.on { background: #5c1520; color: #ffd0d4; }
-  .tbtn:hover:not(.on) { background: #252532; }
-  .tbtn.on:hover { background: #6e1a28; }
+  .sec:first-child { margin-top:2px; }
 
+  .row {
+    display:flex; align-items:center; justify-content:space-between;
+    background:#16161e; border-radius:6px; padding:7px 12px; margin-bottom:5px;
+  }
+  .row span { font-size:12px; color:#d0d0dc; }
+  .sw {
+    width:36px; height:18px; border-radius:99px; background:#323240;
+    position:relative; cursor:pointer; transition:background 0.15s; flex-shrink:0;
+  }
+  .sw.on { background:var(--red); }
+  .sw i {
+    position:absolute; top:2px; left:2px; width:14px; height:14px;
+    border-radius:50%; background:#fff; transition:left 0.15s;
+  }
+  .sw.on i { left:20px; }
+
+  .speed-row {
+    display:flex; align-items:center; justify-content:space-between;
+    background:#16161e; border-radius:6px; padding:7px 12px; margin-bottom:5px;
+  }
+  .speed-row span { font-size:12px; color:#d0d0dc; }
+  .speed-btns { display:flex; gap:4px; }
+  .speed-btns button {
+    width:28px; height:22px; border:none; border-radius:4px;
+    background:#282834; color:#ddd; font-weight:700; font-size:13px; cursor:pointer;
+  }
+  .speed-btns button:hover { background:#333342; }
+
+  /* auth mini */
+  .auth-box {
+    width:100%; max-width:280px; border-radius:10px; overflow:hidden;
+    border:1px solid rgba(225,29,46,0.4); background:#121218;
+    box-shadow:0 16px 50px rgba(0,0,0,0.5);
+  }
+  .auth-title { padding:10px 14px; background:#18181f; font-size:12px; font-weight:700; font-family:'JetBrains Mono',monospace; }
+  .auth-body { padding:14px; }
   .ainput {
-    width: 100%; padding: 8px 10px; margin-bottom: 8px;
-    border: 1px solid #333; border-radius: 5px;
-    background: #1a1a22; color: #eee; font-size: 13px; outline: none;
+    width:100%; padding:8px 10px; margin-bottom:8px; border:1px solid #333; border-radius:6px;
+    background:#1a1a22; color:#eee; font-size:13px; outline:none;
   }
-  .ainput:focus { border-color: var(--red); }
+  .ainput:focus { border-color:var(--red); }
   .abtn {
-    width: 100%; padding: 8px; border: none; border-radius: 5px;
-    background: var(--red); color: #fff; font-weight: 600; font-size: 13px;
-    cursor: pointer;
+    width:100%; padding:8px; border:none; border-radius:6px;
+    background:var(--red); color:#fff; font-weight:600; font-size:13px; cursor:pointer;
   }
-  .abtn:hover { background: var(--red-bright); }
-  .astatus { font-size: 11px; margin-top: 6px; min-height: 16px; }
-  .astatus.ok { color: var(--green); }
-  .astatus.bad { color: var(--red-bright); }
-  .hint { font-size: 10.5px; color: var(--muted); margin-top: 8px; text-align: center; }
+  .abtn:hover { background:var(--red-bright); }
+  .astatus { font-size:11px; margin-top:6px; min-height:16px; }
+  .astatus.ok { color:var(--green); }
+  .astatus.bad { color:var(--red-bright); }
+  .hint { font-size:10.5px; color:var(--muted); margin-top:8px; text-align:center; }
 
-  /* steps */
-  .steps {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
+  .preview-grid { display:grid; grid-template-columns:1fr; gap:1.25rem; }
+  @media (min-width:900px) {
+    .preview-grid { grid-template-columns: 300px 1fr; }
   }
-  .step {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 1.25rem;
-  }
-  .step-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem; font-weight: 700; color: var(--red);
-    margin-bottom: 0.5rem;
-  }
-  .step h3 { font-size: 0.95rem; margin-bottom: 0.3rem; }
-  .step p { font-size: 0.82rem; color: var(--muted); }
 
-  /* footer */
-  footer {
-    position: relative; z-index: 1;
-    border-top: 1px solid var(--border);
-    padding: 2rem 1.5rem;
-    text-align: center;
-    color: var(--muted); font-size: 0.8rem;
-  }
-  footer a { color: var(--red-bright); text-decoration: none; }
+  .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; }
+  .step { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.25rem; }
+  .step-num { font-family:'JetBrains Mono',monospace; font-size:0.75rem; font-weight:700; color:var(--red); margin-bottom:0.5rem; }
+  .step h3 { font-size:0.95rem; margin-bottom:0.3rem; }
+  .step p { font-size:0.82rem; color:var(--muted); }
 
-  @media (max-width: 640px) {
-    .hero { padding: 3rem 1rem 2rem; }
-    .nav-links a:not(.btn-red) { display: none; }
-  }
+  footer { position:relative; z-index:1; border-top:1px solid var(--border); padding:2rem 1.5rem; text-align:center; color:var(--muted); font-size:0.8rem; }
+  footer a { color:var(--red-bright); text-decoration:none; }
 </style>
 </head>
 <body>
@@ -302,13 +163,9 @@
 
 <header>
   <div class="nav-top">
-    <div class="logo">
-      <div class="logo-icon">A</div>
-      AZNO<span>CHEATS</span>
-    </div>
+    <div class="logo"><div class="logo-icon">A</div> AZNO<span>CHEATS</span></div>
     <div class="nav-links">
-      <a href="#products">Products</a>
-      <a href="#previews">Previews</a>
+      <a href="#previews">Preview</a>
       <a href="#setup">Setup</a>
       <a class="btn-red" href="https://github.com/lenainde986-ai/roblox-bench-suite" target="_blank">Get Access</a>
     </div>
@@ -323,79 +180,30 @@
     <span class="sep">|</span>
     <span><strong>AuthKey</strong> Locked</span>
     <span class="sep">|</span>
-    <span><strong>100%</strong> sUNC Ready</span>
+    <span><strong>1</strong> Menu</span>
     <span class="sep">|</span>
     <span><strong>Oct 2026</strong></span>
   </div>
   <div class="hero-actions">
-    <a class="btn-red" href="#products">Browse Products →</a>
-    <a class="btn-outline" href="#previews">Try Menu</a>
-  </div>
-</section>
-
-<section class="section" id="products">
-  <div class="section-label">Products</div>
-  <h2 class="section-title">Popular Games</h2>
-  <p class="section-desc">Private scripts with AuthKey. Built for Volt, Potassium, Wave and other high-sUNC executors.</p>
-  <div class="cards">
-    <div class="card">
-      <div class="card-img">
-        <span class="card-badge">AUTHKEY</span>
-        <span>BSS</span>
-      </div>
-      <div class="card-body">
-        <h3>Bee Swarm Simulator</h3>
-        <p>Auto farm, dig, convert, tokens, bugs, ESP, speed, inf jump, noclip.</p>
-        <div class="card-foot">
-          <span class="price">Private</span>
-          <span class="status-pill">Undetected</span>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-img">
-        <span class="card-badge">AUTHKEY</span>
-        <span>LT2</span>
-      </div>
-      <div class="card-body">
-        <h3>Lumber Tycoon 2</h3>
-        <p>Auto chop, auto sell, fly, tree ESP, speed, inf jump, noclip.</p>
-        <div class="card-foot">
-          <span class="price">Private</span>
-          <span class="status-pill">Undetected</span>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-img">
-        <span class="card-badge">SHELL</span>
-        <span>EXEC</span>
-      </div>
-      <div class="card-body">
-        <h3>Executor Shell</h3>
-        <p>C++ ImGui external + named pipe. Private Hyperion core required.</p>
-        <div class="card-foot">
-          <span class="price">Skeleton</span>
-          <span class="status-pill">Dev</span>
-        </div>
-      </div>
-    </div>
+    <a class="btn-red" href="#previews">Try Menu →</a>
+    <a class="btn-outline" href="https://github.com/lenainde986-ai/roblox-bench-suite" target="_blank">GitHub</a>
   </div>
 </section>
 
 <section class="section" id="previews">
   <div class="section-label">Interactive</div>
-  <h2 class="section-title">Try The Menu</h2>
-  <p class="section-desc">Click everything. These previews work like the real in-game UI.</p>
-  <div class="preview-grid">
+  <h2 class="section-title">Live Menu Preview</h2>
+  <p class="section-desc">Unified AznoCheats loader. One tab — Games. Both scripts inside. Click every toggle.</p>
 
-    <div class="preview-wrap">
-      <div class="preview-bar"><span>AuthKey Gate</span><span class="live">● LIVE</span></div>
-      <div class="preview-stage">
-        <div class="win" id="authWin">
-          <div class="win-title">AznoCheats · Enter Key</div>
-          <div class="win-body">
-            <input class="ainput" id="authInput" type="text" placeholder="Auth Key..." spellcheck="false">
+  <div class="preview-grid">
+    <!-- Auth -->
+    <div class="menu-preview">
+      <div class="menu-bar"><span>AuthKey Gate</span><span class="live">● LIVE</span></div>
+      <div class="menu-stage" style="min-height:280px;align-items:center;">
+        <div class="auth-box" id="authWin">
+          <div class="auth-title">AZNOCHEATS</div>
+          <div class="auth-body">
+            <input class="ainput" id="authInput" type="text" placeholder="Enter Auth Key..." spellcheck="false">
             <button class="abtn" id="authBtn">Unlock</button>
             <div class="astatus" id="authStatus"></div>
             <div class="hint">Demo key: <span style="color:#ccc">azno-demo</span></div>
@@ -404,33 +212,27 @@
       </div>
     </div>
 
-    <div class="preview-wrap">
-      <div class="preview-bar"><span>Bee Swarm Menu</span><span class="live">● LIVE</span></div>
-      <div class="preview-stage">
+    <!-- Main menu -->
+    <div class="menu-preview">
+      <div class="menu-bar"><span>AznoCheats · Games</span><span class="live">● LIVE</span></div>
+      <div class="menu-stage">
         <div class="win">
-          <div class="win-title">AznoCheats BSS | INSERT</div>
-          <div class="win-body" id="bssToggles"></div>
+          <div class="side">
+            <div class="side-logo">AZNOCHEATS</div>
+            <div class="side-tab">Games</div>
+          </div>
+          <div class="body" id="gamesBody">
+            <!-- filled by JS -->
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="preview-wrap">
-      <div class="preview-bar"><span>Lumber Tycoon Menu</span><span class="live">● LIVE</span></div>
-      <div class="preview-stage">
-        <div class="win win-lt2">
-          <div class="win-title">AznoCheats LT2 | INSERT</div>
-          <div class="win-body" id="lt2Toggles"></div>
-        </div>
-      </div>
-    </div>
-
   </div>
 </section>
 
 <section class="section" id="setup">
   <div class="section-label">How it works</div>
   <h2 class="section-title">Ready In Minutes</h2>
-  <p class="section-desc">Three steps from repo to first farm.</p>
   <div class="steps">
     <div class="step">
       <div class="step-num">01</div>
@@ -439,66 +241,115 @@
     </div>
     <div class="step">
       <div class="step-num">02</div>
-      <h3>Set your AuthKey</h3>
-      <p>Open the script, change AUTH_KEY at the top to your private key.</p>
+      <h3>Set AuthKey</h3>
+      <p>Open <code style="color:#ccc">cheats/AznoCheats.lua</code> and set your private key.</p>
     </div>
     <div class="step">
       <div class="step-num">03</div>
-      <h3>Execute & unlock</h3>
-      <p>Paste in executor, enter key, hit INSERT for the menu.</p>
+      <h3>Execute & play</h3>
+      <p>Unlock → Games tab → Load BSS or LT2 → enable features. INSERT to hide.</p>
     </div>
   </div>
 </section>
 
 <footer>
-  AznoCheats · Private suite ·
+  AznoCheats · Unified Games menu ·
   <a href="https://github.com/lenainde986-ai/roblox-bench-suite" target="_blank">GitHub</a>
   · Always use an alt
 </footer>
 
 <script>
-  const DEMO_KEY = "azno-demo";
+  // Auth demo
+  const DEMO = "azno-demo";
   const authInput = document.getElementById("authInput");
   const authBtn = document.getElementById("authBtn");
   const authStatus = document.getElementById("authStatus");
   const authWin = document.getElementById("authWin");
 
   function tryUnlock() {
-    const val = authInput.value.trim();
-    if (val === DEMO_KEY) {
+    if (authInput.value.trim() === DEMO) {
       authStatus.textContent = "Key accepted — unlocked";
       authStatus.className = "astatus ok";
-      authWin.style.boxShadow = "0 0 0 1px #22c55e, 0 16px 50px rgba(0,0,0,0.55)";
+      authWin.style.boxShadow = "0 0 0 1px #22c55e, 0 16px 50px rgba(0,0,0,0.5)";
       setTimeout(() => { authWin.style.opacity = "0.4"; authWin.style.pointerEvents = "none"; }, 500);
     } else {
       authStatus.textContent = "Invalid key";
       authStatus.className = "astatus bad";
-      authWin.style.boxShadow = "0 0 0 1px #e11d2e, 0 16px 50px rgba(0,0,0,0.55)";
-      setTimeout(() => { authWin.style.boxShadow = "0 16px 50px rgba(0,0,0,0.55)"; }, 700);
+      authWin.style.boxShadow = "0 0 0 1px #e11d2e, 0 16px 50px rgba(0,0,0,0.5)";
+      setTimeout(() => { authWin.style.boxShadow = "0 16px 50px rgba(0,0,0,0.5)"; }, 700);
     }
   }
   authBtn.addEventListener("click", tryUnlock);
   authInput.addEventListener("keydown", e => { if (e.key === "Enter") tryUnlock(); });
 
-  function buildToggles(id, names) {
-    const el = document.getElementById(id);
-    names.forEach(name => {
-      const b = document.createElement("button");
-      b.className = "tbtn";
-      b.textContent = name + ": OFF";
-      b.dataset.on = "0";
-      b.addEventListener("click", () => {
-        const on = b.dataset.on === "1";
-        b.dataset.on = on ? "0" : "1";
-        b.classList.toggle("on", !on);
-        b.textContent = name + ": " + (on ? "OFF" : "ON");
-      });
-      el.appendChild(b);
-    });
+  // Games body builder
+  const body = document.getElementById("gamesBody");
+
+  function addSec(title) {
+    const d = document.createElement("div");
+    d.className = "sec";
+    d.textContent = title;
+    body.appendChild(d);
   }
 
-  buildToggles("bssToggles", ["Auto Farm","Auto Dig","Auto Convert","Collect Tokens","Kill Bugs","ESP","Inf Jump","Noclip"]);
-  buildToggles("lt2Toggles", ["Auto Chop","Auto Sell","Fly","ESP","Inf Jump","Noclip"]);
+  function addToggle(label, startOn) {
+    const row = document.createElement("div");
+    row.className = "row";
+    const span = document.createElement("span");
+    span.textContent = label;
+    const sw = document.createElement("div");
+    sw.className = "sw" + (startOn ? " on" : "");
+    sw.innerHTML = "<i></i>";
+    sw.addEventListener("click", () => sw.classList.toggle("on"));
+    row.appendChild(span);
+    row.appendChild(sw);
+    body.appendChild(row);
+  }
+
+  function addSpeed(label, val) {
+    const row = document.createElement("div");
+    row.className = "speed-row";
+    const span = document.createElement("span");
+    span.textContent = label + ": " + val;
+    const btns = document.createElement("div");
+    btns.className = "speed-btns";
+    let v = val;
+    const minus = document.createElement("button");
+    minus.textContent = "-";
+    const plus = document.createElement("button");
+    plus.textContent = "+";
+    minus.addEventListener("click", () => { v = Math.max(16, v - 5); span.textContent = label + ": " + v; });
+    plus.addEventListener("click", () => { v = Math.min(120, v + 5); span.textContent = label + ": " + v; });
+    btns.appendChild(minus);
+    btns.appendChild(plus);
+    row.appendChild(span);
+    row.appendChild(btns);
+    body.appendChild(row);
+  }
+
+  addSec("BEE SWARM SIMULATOR");
+  addToggle("Load BSS", false);
+  addToggle("Auto Farm", false);
+  addToggle("Auto Dig", false);
+  addToggle("Auto Convert", false);
+  addToggle("Collect Tokens", true);
+  addToggle("Kill Bugs", true);
+  addToggle("ESP", true);
+  addToggle("Token ESP", true);
+  addToggle("Bug ESP", true);
+  addToggle("Infinite Jump", false);
+  addToggle("Noclip", false);
+  addSpeed("Speed", 35);
+
+  addSec("LUMBER TYCOON 2");
+  addToggle("Load LT2", false);
+  addToggle("Auto Chop", false);
+  addToggle("Auto Sell", false);
+  addToggle("Fly", false);
+  addToggle("Tree ESP", true);
+  addToggle("Infinite Jump", false);
+  addToggle("Noclip", false);
+  addSpeed("Speed", 40);
 </script>
 </body>
 </html>
