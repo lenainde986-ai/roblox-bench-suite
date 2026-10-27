@@ -4,152 +4,422 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AznoCheats</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0b0d10; --surface: #12151a; --border: #1e242c;
-    --text: #e6edf3; --muted: #8b949e; --accent: #3fb950;
-    --accent-dim: rgba(63,185,80,0.15); --warning: #d29922; --danger: #f85149;
+    --bg: #070709;
+    --surface: #0e0e12;
+    --surface2: #14141a;
+    --border: #1f1f28;
+    --text: #f0f0f5;
+    --muted: #8b8b9a;
+    --red: #e11d2e;
+    --red-bright: #ff2a3d;
+    --red-dim: rgba(225, 29, 46, 0.15);
+    --red-glow: rgba(225, 29, 46, 0.35);
+    --green: #22c55e;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-  header { border-bottom:1px solid var(--border); padding:1.1rem 2rem; display:flex; align-items:center; justify-content:space-between; background:var(--surface); position:sticky; top:0; z-index:50; }
-  .logo { font-family:'JetBrains Mono',monospace; font-weight:700; font-size:1.15rem; }
-  .logo span { color:var(--accent); }
-  nav a { color:var(--muted); text-decoration:none; margin-left:1.3rem; font-size:0.88rem; }
-  nav a:hover { color:var(--text); }
-  .hero { max-width:1000px; margin:0 auto; padding:3rem 2rem 2rem; }
-  .hero h1 { font-size:2.2rem; font-weight:700; letter-spacing:-0.03em; margin-bottom:0.5rem; }
-  .hero p { color:var(--muted); font-size:1.02rem; max-width:520px; }
-  .badge { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:0.7rem; padding:0.2rem 0.5rem; border-radius:999px; background:var(--accent-dim); color:var(--accent); border:1px solid rgba(63,185,80,0.25); margin-bottom:1rem; }
-  .section { max-width:1000px; margin:0 auto; padding:0 2rem 2.5rem; }
-  .section h2 { font-size:1.2rem; margin-bottom:0.85rem; }
-  .section-desc { color:var(--muted); font-size:0.9rem; margin-bottom:1.25rem; }
-  .preview-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.25rem; }
-  .preview-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
-  .preview-header { padding:0.7rem 1rem; background:#0e1116; border-bottom:1px solid var(--border); font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--muted); display:flex; justify-content:space-between; align-items:center; }
-  .preview-body { padding:1.25rem; min-height:280px; display:flex; align-items:center; justify-content:center; background:#0a0c0f; }
-  .dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:6px; }
-  .dot-g { background:var(--accent); } .dot-y { background:var(--warning); } .dot-r { background:var(--danger); }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
 
-  /* Fake Roblox-style windows */
-  .win { width:100%; max-width:280px; border-radius:8px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,0.45); border:1px solid #2a2a35; user-select:none; }
-  .win-title { padding:8px 12px; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:#fff; display:flex; justify-content:space-between; align-items:center; }
-  .win-body { padding:12px; }
-  .win-bss .win-title { background:#242430; }
-  .win-bss { background:#14141a; }
-  .win-lt2 .win-title { background:#1c3020; }
-  .win-lt2 { background:#101610; }
-  .win-auth .win-title { background:#222230; }
-  .win-auth { background:#121218; }
+  /* grid bg */
+  .grid-bg {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(225,29,46,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(225,29,46,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 20%, transparent 75%);
+  }
 
-  .btn { width:100%; padding:7px 10px; margin-bottom:6px; border:none; border-radius:5px; font-family:'Inter',sans-serif; font-size:12.5px; cursor:pointer; transition:background 0.15s, transform 0.1s; text-align:left; color:#ddd; }
-  .btn:active { transform:scale(0.98); }
-  .btn-off { background:#22222c; }
-  .btn-off:hover { background:#2a2a36; }
-  .btn-on { background:#1e5c2e; color:#e8ffe8; }
-  .btn-on:hover { background:#246b36; }
+  /* header */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(7,7,9,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-top {
+    max-width: 1200px; margin: 0 auto;
+    padding: 0.75rem 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700; font-size: 1.15rem;
+    letter-spacing: 0.04em;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .logo-icon {
+    width: 28px; height: 28px; border-radius: 6px;
+    background: linear-gradient(135deg, var(--red), #9b1220);
+    display: grid; place-items: center;
+    font-size: 14px;
+  }
+  .logo span { color: var(--red-bright); }
+  .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 0.875rem; font-weight: 500;
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .btn-red {
+    background: var(--red); color: #fff; border: none;
+    padding: 0.5rem 1.1rem; border-radius: 8px;
+    font-weight: 600; font-size: 0.875rem; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem;
+    transition: background 0.15s, box-shadow 0.15s;
+  }
+  .btn-red:hover { background: var(--red-bright); box-shadow: 0 0 20px var(--red-glow); }
+  .btn-outline {
+    background: transparent; color: var(--text);
+    border: 1px solid var(--border); padding: 0.5rem 1.1rem; border-radius: 8px;
+    font-weight: 500; font-size: 0.875rem; cursor: pointer; text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .btn-outline:hover { border-color: var(--red); background: var(--red-dim); }
 
-  .auth-input { width:100%; padding:8px 10px; margin-bottom:8px; border:1px solid #333; border-radius:5px; background:#1a1a22; color:#eee; font-size:13px; outline:none; }
-  .auth-input:focus { border-color:#3fb950; }
-  .auth-btn { width:100%; padding:8px; border:none; border-radius:5px; background:#2d6b3a; color:#fff; font-weight:600; font-size:13px; cursor:pointer; }
-  .auth-btn:hover { background:#358544; }
-  .auth-status { font-size:11px; margin-top:6px; min-height:16px; }
-  .auth-status.ok { color:var(--accent); }
-  .auth-status.bad { color:var(--danger); }
+  /* hero */
+  .hero {
+    position: relative; z-index: 1;
+    max-width: 1200px; margin: 0 auto;
+    padding: 5rem 1.5rem 3rem;
+    text-align: center;
+  }
+  .hero-title {
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 800; letter-spacing: -0.03em;
+    line-height: 1;
+    background: linear-gradient(180deg, #fff 30%, var(--red-bright));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 40px var(--red-glow));
+    margin-bottom: 0.25rem;
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-weight: 500; letter-spacing: 0.35em;
+    color: var(--muted); text-transform: uppercase;
+    margin-bottom: 1.75rem;
+  }
+  .stats-bar {
+    display: inline-flex; flex-wrap: wrap; gap: 0.35rem 1.25rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 999px; padding: 0.55rem 1.25rem;
+    font-size: 0.8rem; color: var(--muted);
+    margin-bottom: 2rem;
+  }
+  .stats-bar strong { color: var(--text); font-weight: 600; }
+  .stats-bar .sep { color: var(--border); }
+  .hero-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
 
-  .hint { font-size:11px; color:var(--muted); margin-top:8px; text-align:center; }
-  .live-badge { font-size:10px; background:var(--accent-dim); color:var(--accent); padding:2px 6px; border-radius:4px; }
+  /* sections */
+  .section {
+    position: relative; z-index: 1;
+    max-width: 1200px; margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+  }
+  .section-label {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--red);
+    margin-bottom: 0.4rem;
+  }
+  .section-title {
+    font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .section-desc { color: var(--muted); font-size: 0.95rem; margin-bottom: 1.75rem; max-width: 520px; }
 
-  table { width:100%; border-collapse:collapse; font-size:0.86rem; }
-  th, td { text-align:left; padding:0.6rem 0.75rem; border-bottom:1px solid var(--border); }
-  th { color:var(--muted); font-weight:500; }
-  .ok { color:var(--accent); } .warn { color:var(--warning); }
+  /* product cards */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+  .card:hover {
+    border-color: rgba(225,29,46,0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 30px var(--red-dim);
+  }
+  .card-img {
+    height: 120px;
+    background: linear-gradient(135deg, #1a0a0c 0%, #2a1015 50%, #1a0a0c 100%);
+    display: grid; place-items: center;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-img span {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700; font-size: 1.4rem;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 0.05em;
+  }
+  .card-badge {
+    position: absolute; top: 10px; left: 10px;
+    background: var(--red-dim); color: var(--red-bright);
+    font-size: 0.65rem; font-weight: 600; padding: 0.2rem 0.5rem;
+    border-radius: 4px; border: 1px solid rgba(225,29,46,0.3);
+  }
+  .card-body { padding: 1rem 1.1rem 1.15rem; }
+  .card-body h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
+  .card-body p { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.75rem; }
+  .card-foot { display: flex; justify-content: space-between; align-items: center; }
+  .price { font-weight: 700; color: var(--red-bright); font-size: 0.95rem; }
+  .status-pill {
+    font-size: 0.7rem; font-weight: 600;
+    padding: 0.2rem 0.5rem; border-radius: 999px;
+    background: rgba(34,197,94,0.12); color: var(--green);
+  }
 
-  footer { border-top:1px solid var(--border); padding:1.5rem; text-align:center; color:var(--muted); font-size:0.8rem; }
-  .cta { display:inline-block; margin-top:1.2rem; padding:0.55rem 1.1rem; background:var(--accent); color:#0b0d10; font-weight:600; font-size:0.86rem; border-radius:6px; text-decoration:none; }
+  /* interactive previews */
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 1.25rem;
+  }
+  .preview-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .preview-bar {
+    padding: 0.55rem 0.9rem;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.72rem; font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .live {
+    color: var(--green); font-size: 0.65rem; font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  .preview-stage {
+    padding: 1.5rem;
+    min-height: 300px;
+    display: flex; align-items: center; justify-content: center;
+    background: #0a0a0e;
+  }
 
-  .feature-list { list-style:none; margin-top:8px; }
-  .feature-list li { font-size:12px; color:var(--muted); padding:2px 0; }
-  .feature-list li span { color:var(--accent); margin-right:6px; }
+  /* fake windows */
+  .win {
+    width: 100%; max-width: 260px;
+    border-radius: 8px; overflow: hidden;
+    border: 1px solid #2a2a35;
+    box-shadow: 0 16px 50px rgba(0,0,0,0.55);
+    user-select: none;
+  }
+  .win-title {
+    padding: 8px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px; font-weight: 600; color: #fff;
+    background: #1e1e28;
+  }
+  .win-body { padding: 10px 12px 12px; background: #121218; }
+  .win-lt2 .win-title { background: #1a221c; }
+  .win-lt2 .win-body { background: #0e1410; }
+
+  .tbtn {
+    width: 100%; padding: 7px 10px; margin-bottom: 5px;
+    border: none; border-radius: 5px;
+    font-size: 12px; font-family: 'Inter', sans-serif;
+    cursor: pointer; text-align: left; color: #ccc;
+    background: #1c1c26; transition: background 0.12s, transform 0.08s;
+  }
+  .tbtn:active { transform: scale(0.98); }
+  .tbtn.on { background: #5c1520; color: #ffd0d4; }
+  .tbtn:hover:not(.on) { background: #252532; }
+  .tbtn.on:hover { background: #6e1a28; }
+
+  .ainput {
+    width: 100%; padding: 8px 10px; margin-bottom: 8px;
+    border: 1px solid #333; border-radius: 5px;
+    background: #1a1a22; color: #eee; font-size: 13px; outline: none;
+  }
+  .ainput:focus { border-color: var(--red); }
+  .abtn {
+    width: 100%; padding: 8px; border: none; border-radius: 5px;
+    background: var(--red); color: #fff; font-weight: 600; font-size: 13px;
+    cursor: pointer;
+  }
+  .abtn:hover { background: var(--red-bright); }
+  .astatus { font-size: 11px; margin-top: 6px; min-height: 16px; }
+  .astatus.ok { color: var(--green); }
+  .astatus.bad { color: var(--red-bright); }
+  .hint { font-size: 10.5px; color: var(--muted); margin-top: 8px; text-align: center; }
+
+  /* steps */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+  .step {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem;
+  }
+  .step-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem; font-weight: 700; color: var(--red);
+    margin-bottom: 0.5rem;
+  }
+  .step h3 { font-size: 0.95rem; margin-bottom: 0.3rem; }
+  .step p { font-size: 0.82rem; color: var(--muted); }
+
+  /* footer */
+  footer {
+    position: relative; z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    color: var(--muted); font-size: 0.8rem;
+  }
+  footer a { color: var(--red-bright); text-decoration: none; }
+
+  @media (max-width: 640px) {
+    .hero { padding: 3rem 1rem 2rem; }
+    .nav-links a:not(.btn-red) { display: none; }
+  }
 </style>
 </head>
 <body>
+<div class="grid-bg"></div>
+
 <header>
-  <div class="logo">Azno<span>Cheats</span></div>
-  <nav>
-    <a href="#previews">Previews</a>
-    <a href="#status">Status</a>
-    <a href="https://github.com/lenainde986-ai/roblox-bench-suite" target="_blank">Repo</a>
-  </nav>
+  <div class="nav-top">
+    <div class="logo">
+      <div class="logo-icon">A</div>
+      AZNO<span>CHEATS</span>
+    </div>
+    <div class="nav-links">
+      <a href="#products">Products</a>
+      <a href="#previews">Previews</a>
+      <a href="#setup">Setup</a>
+      <a class="btn-red" href="https://github.com/lenainde986-ai/roblox-bench-suite" target="_blank">Get Access</a>
+    </div>
+  </div>
 </header>
 
 <section class="hero">
-  <div class="badge">PRIVATE · AUTHKEY · INTERACTIVE</div>
-  <h1>AznoCheats</h1>
-  <p>Private Bee Swarm + Lumber Tycoon suite. Click the previews below — they work exactly like the real menus.</p>
-  <a class="cta" href="https://github.com/lenainde986-ai/roblox-bench-suite" target="_blank">Open Repository</a>
+  <h1 class="hero-title">AZNOCHEATS</h1>
+  <p class="hero-sub">Private Suite</p>
+  <div class="stats-bar">
+    <span><strong>2</strong> Games</span>
+    <span class="sep">|</span>
+    <span><strong>AuthKey</strong> Locked</span>
+    <span class="sep">|</span>
+    <span><strong>100%</strong> sUNC Ready</span>
+    <span class="sep">|</span>
+    <span><strong>Oct 2026</strong></span>
+  </div>
+  <div class="hero-actions">
+    <a class="btn-red" href="#products">Browse Products →</a>
+    <a class="btn-outline" href="#previews">Try Menu</a>
+  </div>
+</section>
+
+<section class="section" id="products">
+  <div class="section-label">Products</div>
+  <h2 class="section-title">Popular Games</h2>
+  <p class="section-desc">Private scripts with AuthKey. Built for Volt, Potassium, Wave and other high-sUNC executors.</p>
+  <div class="cards">
+    <div class="card">
+      <div class="card-img">
+        <span class="card-badge">AUTHKEY</span>
+        <span>BSS</span>
+      </div>
+      <div class="card-body">
+        <h3>Bee Swarm Simulator</h3>
+        <p>Auto farm, dig, convert, tokens, bugs, ESP, speed, inf jump, noclip.</p>
+        <div class="card-foot">
+          <span class="price">Private</span>
+          <span class="status-pill">Undetected</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img">
+        <span class="card-badge">AUTHKEY</span>
+        <span>LT2</span>
+      </div>
+      <div class="card-body">
+        <h3>Lumber Tycoon 2</h3>
+        <p>Auto chop, auto sell, fly, tree ESP, speed, inf jump, noclip.</p>
+        <div class="card-foot">
+          <span class="price">Private</span>
+          <span class="status-pill">Undetected</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img">
+        <span class="card-badge">SHELL</span>
+        <span>EXEC</span>
+      </div>
+      <div class="card-body">
+        <h3>Executor Shell</h3>
+        <p>C++ ImGui external + named pipe. Private Hyperion core required.</p>
+        <div class="card-foot">
+          <span class="price">Skeleton</span>
+          <span class="status-pill">Dev</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section class="section" id="previews">
-  <h2>Interactive Previews</h2>
-  <p class="section-desc">Click every button. Type a key. Toggle features. These are live mockups of the real scripts.</p>
-
+  <div class="section-label">Interactive</div>
+  <h2 class="section-title">Try The Menu</h2>
+  <p class="section-desc">Click everything. These previews work like the real in-game UI.</p>
   <div class="preview-grid">
 
-    <!-- AUTH KEY PREVIEW -->
-    <div class="preview-card">
-      <div class="preview-header">
-        <span><span class="dot dot-g"></span>AuthKey Gate</span>
-        <span class="live-badge">LIVE</span>
-      </div>
-      <div class="preview-body">
-        <div class="win win-auth" id="authWin">
+    <div class="preview-wrap">
+      <div class="preview-bar"><span>AuthKey Gate</span><span class="live">● LIVE</span></div>
+      <div class="preview-stage">
+        <div class="win" id="authWin">
           <div class="win-title">AznoCheats · Enter Key</div>
           <div class="win-body">
-            <input class="auth-input" id="authInput" type="text" placeholder="Auth Key..." spellcheck="false">
-            <button class="auth-btn" id="authBtn">Unlock</button>
-            <div class="auth-status" id="authStatus"></div>
-            <div class="hint">Demo key: <code style="color:#aaa">azno-demo</code></div>
+            <input class="ainput" id="authInput" type="text" placeholder="Auth Key..." spellcheck="false">
+            <button class="abtn" id="authBtn">Unlock</button>
+            <div class="astatus" id="authStatus"></div>
+            <div class="hint">Demo key: <span style="color:#ccc">azno-demo</span></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- BSS MENU PREVIEW -->
-    <div class="preview-card">
-      <div class="preview-header">
-        <span><span class="dot dot-g"></span>Bee Swarm Menu</span>
-        <span class="live-badge">LIVE</span>
-      </div>
-      <div class="preview-body">
-        <div class="win win-bss" id="bssWin">
-          <div class="win-title">
-            <span>AznoCheats BSS | INSERT</span>
-          </div>
-          <div class="win-body" id="bssToggles">
-            <!-- filled by JS -->
-          </div>
-          <div class="hint" style="padding-bottom:10px">Click toggles · state is live</div>
+    <div class="preview-wrap">
+      <div class="preview-bar"><span>Bee Swarm Menu</span><span class="live">● LIVE</span></div>
+      <div class="preview-stage">
+        <div class="win">
+          <div class="win-title">AznoCheats BSS | INSERT</div>
+          <div class="win-body" id="bssToggles"></div>
         </div>
       </div>
     </div>
 
-    <!-- LT2 MENU PREVIEW -->
-    <div class="preview-card">
-      <div class="preview-header">
-        <span><span class="dot dot-g"></span>Lumber Tycoon Menu</span>
-        <span class="live-badge">LIVE</span>
-      </div>
-      <div class="preview-body">
-        <div class="win win-lt2" id="lt2Win">
-          <div class="win-title">
-            <span>AznoCheats LT2 | INSERT</span>
-          </div>
-          <div class="win-body" id="lt2Toggles">
-            <!-- filled by JS -->
-          </div>
-          <div class="hint" style="padding-bottom:10px">Click toggles · state is live</div>
+    <div class="preview-wrap">
+      <div class="preview-bar"><span>Lumber Tycoon Menu</span><span class="live">● LIVE</span></div>
+      <div class="preview-stage">
+        <div class="win win-lt2">
+          <div class="win-title">AznoCheats LT2 | INSERT</div>
+          <div class="win-body" id="lt2Toggles"></div>
         </div>
       </div>
     </div>
@@ -157,51 +427,36 @@
   </div>
 </section>
 
-<section class="section">
-  <h2>What you get after unlock</h2>
-  <div class="preview-grid">
-    <div class="preview-card" style="padding:1.25rem">
-      <h3 style="font-size:0.95rem;margin-bottom:0.4rem"><span class="tag">BSS</span> Bee Swarm</h3>
-      <ul class="feature-list">
-        <li><span>✓</span> Auto Farm + Auto Dig + Auto Convert</li>
-        <li><span>✓</span> Token collect + Bug kill</li>
-        <li><span>✓</span> ESP (tokens + monsters)</li>
-        <li><span>✓</span> Speed / Inf Jump / Noclip</li>
-        <li><span>✓</span> AuthKey locked</li>
-      </ul>
+<section class="section" id="setup">
+  <div class="section-label">How it works</div>
+  <h2 class="section-title">Ready In Minutes</h2>
+  <p class="section-desc">Three steps from repo to first farm.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Get an executor</h3>
+      <p>Volt or Potassium for 100% sUNC. Solara / Xeno work free.</p>
     </div>
-    <div class="preview-card" style="padding:1.25rem">
-      <h3 style="font-size:0.95rem;margin-bottom:0.4rem"><span class="tag">LT2</span> Lumber Tycoon 2</h3>
-      <ul class="feature-list">
-        <li><span>✓</span> Auto Chop + Auto Sell</li>
-        <li><span>✓</span> Fly (WASD + Space/Ctrl)</li>
-        <li><span>✓</span> Tree ESP</li>
-        <li><span>✓</span> Speed / Inf Jump / Noclip</li>
-        <li><span>✓</span> AuthKey locked</li>
-      </ul>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Set your AuthKey</h3>
+      <p>Open the script, change AUTH_KEY at the top to your private key.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Execute & unlock</h3>
+      <p>Paste in executor, enter key, hit INSERT for the menu.</p>
     </div>
   </div>
-</section>
-
-<section class="section" id="status">
-  <h2>Recommended executors (Oct 2026)</h2>
-  <table>
-    <thead><tr><th>Executor</th><th>sUNC</th><th>Notes</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Volt</strong></td><td class="ok">100%</td><td>Hyperion emulation — best features</td></tr>
-      <tr><td><strong>Potassium</strong></td><td class="ok">100%</td><td>Lifetime, clean</td></tr>
-      <tr><td><strong>Wave</strong></td><td class="ok">100%</td><td>Strong internal</td></tr>
-      <tr><td>Solara / Xeno / Madium</td><td class="ok">High</td><td>Best free</td></tr>
-    </tbody>
-  </table>
 </section>
 
 <footer>
-  AznoCheats · Private suite · Interactive previews · Always use an alt
+  AznoCheats · Private suite ·
+  <a href="https://github.com/lenainde986-ai/roblox-bench-suite" target="_blank">GitHub</a>
+  · Always use an alt
 </footer>
 
 <script>
-  // ===== AuthKey demo =====
   const DEMO_KEY = "azno-demo";
   const authInput = document.getElementById("authInput");
   const authBtn = document.getElementById("authBtn");
@@ -212,50 +467,38 @@
     const val = authInput.value.trim();
     if (val === DEMO_KEY) {
       authStatus.textContent = "Key accepted — unlocked";
-      authStatus.className = "auth-status ok";
-      authWin.style.boxShadow = "0 0 0 1px #3fb950, 0 12px 40px rgba(0,0,0,0.45)";
-      setTimeout(() => {
-        authWin.style.opacity = "0.35";
-        authWin.style.pointerEvents = "none";
-      }, 600);
+      authStatus.className = "astatus ok";
+      authWin.style.boxShadow = "0 0 0 1px #22c55e, 0 16px 50px rgba(0,0,0,0.55)";
+      setTimeout(() => { authWin.style.opacity = "0.4"; authWin.style.pointerEvents = "none"; }, 500);
     } else {
       authStatus.textContent = "Invalid key";
-      authStatus.className = "auth-status bad";
-      authWin.style.boxShadow = "0 0 0 1px #f85149, 0 12px 40px rgba(0,0,0,0.45)";
-      setTimeout(() => { authWin.style.boxShadow = "0 12px 40px rgba(0,0,0,0.45)"; }, 800);
+      authStatus.className = "astatus bad";
+      authWin.style.boxShadow = "0 0 0 1px #e11d2e, 0 16px 50px rgba(0,0,0,0.55)";
+      setTimeout(() => { authWin.style.boxShadow = "0 16px 50px rgba(0,0,0,0.55)"; }, 700);
     }
   }
   authBtn.addEventListener("click", tryUnlock);
   authInput.addEventListener("keydown", e => { if (e.key === "Enter") tryUnlock(); });
 
-  // ===== Toggle builder =====
-  function buildToggles(containerId, items) {
-    const el = document.getElementById(containerId);
-    items.forEach(name => {
-      const btn = document.createElement("button");
-      btn.className = "btn btn-off";
-      btn.textContent = name + ": OFF";
-      btn.dataset.on = "0";
-      btn.addEventListener("click", () => {
-        const on = btn.dataset.on === "1";
-        btn.dataset.on = on ? "0" : "1";
-        btn.className = on ? "btn btn-off" : "btn btn-on";
-        btn.textContent = name + ": " + (on ? "OFF" : "ON");
+  function buildToggles(id, names) {
+    const el = document.getElementById(id);
+    names.forEach(name => {
+      const b = document.createElement("button");
+      b.className = "tbtn";
+      b.textContent = name + ": OFF";
+      b.dataset.on = "0";
+      b.addEventListener("click", () => {
+        const on = b.dataset.on === "1";
+        b.dataset.on = on ? "0" : "1";
+        b.classList.toggle("on", !on);
+        b.textContent = name + ": " + (on ? "OFF" : "ON");
       });
-      el.appendChild(btn);
+      el.appendChild(b);
     });
   }
 
-  buildToggles("bssToggles", [
-    "Auto Farm", "Auto Dig", "Auto Convert",
-    "Collect Tokens", "Kill Bugs", "ESP",
-    "Inf Jump", "Noclip"
-  ]);
-
-  buildToggles("lt2Toggles", [
-    "Auto Chop", "Auto Sell", "Fly",
-    "ESP", "Inf Jump", "Noclip"
-  ]);
+  buildToggles("bssToggles", ["Auto Farm","Auto Dig","Auto Convert","Collect Tokens","Kill Bugs","ESP","Inf Jump","Noclip"]);
+  buildToggles("lt2Toggles", ["Auto Chop","Auto Sell","Fly","ESP","Inf Jump","Noclip"]);
 </script>
 </body>
 </html>
