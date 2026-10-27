@@ -1,5 +1,5 @@
 -- AznoCheats
--- Multi-tab pro menu · World / Character / Aim / Visuals / Games
+-- Multi-tab · Animations · Visual effects
 
 local AUTH_KEY = "CHANGE_ME_TO_YOUR_PRIVATE_KEY"
 local REMOTE_KEY_URL = ""
@@ -28,6 +28,13 @@ local Lighting = game:GetService("Lighting")
 local VirtualUser = game:GetService("VirtualUser")
 local Camera = workspace.CurrentCamera
 
+local function tween(obj, props, t, style, dir)
+    local ti = TweenInfo.new(t or 0.2, style or Enum.EasingStyle.Quad, dir or Enum.EasingDirection.Out)
+    local tw = TweenService:Create(obj, ti, props)
+    tw:Play()
+    return tw
+end
+
 -- ===================== AUTH ===================== --
 local AuthGui = Instance.new("ScreenGui")
 AuthGui.Name = "AznoAuth"
@@ -40,13 +47,28 @@ AuthBg.Size = UDim2.new(0, 340, 0, 160)
 AuthBg.Position = UDim2.new(0.5, -170, 0.5, -80)
 AuthBg.BackgroundColor3 = Color3.fromRGB(18, 18, 24)
 AuthBg.BorderSizePixel = 0
+AuthBg.BackgroundTransparency = 1
 AuthBg.Parent = AuthGui
 Instance.new("UICorner", AuthBg).CornerRadius = UDim.new(0, 10)
+
 local AuthStroke = Instance.new("UIStroke")
 AuthStroke.Color = Color3.fromRGB(225, 29, 46)
 AuthStroke.Thickness = 1
-AuthStroke.Transparency = 0.55
+AuthStroke.Transparency = 1
 AuthStroke.Parent = AuthBg
+
+-- glow pulse on auth
+task.spawn(function()
+    while AuthGui.Parent do
+        tween(AuthStroke, {Transparency = 0.3}, 0.8)
+        task.wait(0.8)
+        tween(AuthStroke, {Transparency = 0.7}, 0.8)
+        task.wait(0.8)
+    end
+end)
+
+tween(AuthBg, {BackgroundTransparency = 0}, 0.35)
+tween(AuthStroke, {Transparency = 0.5}, 0.4)
 
 local AuthTitle = Instance.new("TextLabel")
 AuthTitle.Size = UDim2.new(1, 0, 0, 36)
@@ -56,8 +78,10 @@ AuthTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 AuthTitle.Font = Enum.Font.GothamBold
 AuthTitle.TextSize = 13
 AuthTitle.TextXAlignment = Enum.TextXAlignment.Left
+AuthTitle.TextTransparency = 1
 AuthTitle.Parent = AuthBg
 Instance.new("UICorner", AuthTitle).CornerRadius = UDim.new(0, 10)
+tween(AuthTitle, {TextTransparency = 0}, 0.4)
 
 local AuthBox = Instance.new("TextBox")
 AuthBox.Size = UDim2.new(1, -28, 0, 34)
@@ -69,8 +93,13 @@ AuthBox.PlaceholderColor3 = Color3.fromRGB(100, 100, 115)
 AuthBox.Font = Enum.Font.Gotham
 AuthBox.TextSize = 13
 AuthBox.ClearTextOnFocus = false
+AuthBox.BackgroundTransparency = 1
+AuthBox.TextTransparency = 1
 AuthBox.Parent = AuthBg
 Instance.new("UICorner", AuthBox).CornerRadius = UDim.new(0, 6)
+task.delay(0.1, function()
+    tween(AuthBox, {BackgroundTransparency = 0, TextTransparency = 0}, 0.3)
+end)
 
 local AuthStatus = Instance.new("TextLabel")
 AuthStatus.Size = UDim2.new(1, -28, 0, 18)
@@ -91,11 +120,27 @@ AuthBtn.Text = "Unlock"
 AuthBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 AuthBtn.Font = Enum.Font.GothamBold
 AuthBtn.TextSize = 13
+AuthBtn.BackgroundTransparency = 1
+AuthBtn.TextTransparency = 1
 AuthBtn.Parent = AuthBg
 Instance.new("UICorner", AuthBtn).CornerRadius = UDim.new(0, 6)
+task.delay(0.15, function()
+    tween(AuthBtn, {BackgroundTransparency = 0, TextTransparency = 0}, 0.3)
+end)
+
+AuthBtn.MouseEnter:Connect(function()
+    tween(AuthBtn, {BackgroundColor3 = Color3.fromRGB(255, 42, 61)}, 0.12)
+end)
+AuthBtn.MouseLeave:Connect(function()
+    tween(AuthBtn, {BackgroundColor3 = Color3.fromRGB(225, 29, 46)}, 0.12)
+end)
 
 -- ===================== MAIN ===================== --
 local function openMenu()
+    -- fade out auth
+    tween(AuthBg, {BackgroundTransparency = 1}, 0.25)
+    tween(AuthStroke, {Transparency = 1}, 0.25)
+    task.wait(0.28)
     AuthGui:Destroy()
 
     LocalPlayer.Idled:Connect(function()
@@ -104,17 +149,12 @@ local function openMenu()
     end)
 
     getgenv().Azno = getgenv().Azno or {
-        -- World
-        Fullbright = false, NoFog = false, XRay = false, TimeCycle = false, Gravity = false,
-        -- Character
-        Speed = 16, InfJump = false, Noclip = false, Fly = false, GodMode = false, InfStamina = false,
-        -- Aim
-        Aimbot = false, SilentAim = false, FOV = 120, Smooth = 5, TeamCheck = true, VisibleCheck = true, Triggerbot = false,
-        -- Visuals
-        ESP = false, BoxESP = false, NameESP = false, DistESP = false, Tracer = false, Chams = false,
-        -- Games
-        BSS = { AutoFarm=false, AutoDig=false, AutoConvert=false, CollectTokens=true, KillBugs=true, ESP=true, Loaded=false },
-        LT2 = { AutoChop=false, AutoSell=false, Fly=false, ESP=true, Loaded=false },
+        Fullbright=false, NoFog=false, XRay=false, Gravity=false,
+        Speed=16, InfJump=false, Noclip=false, Fly=false, GodMode=false, InfStamina=false,
+        Aimbot=false, SilentAim=false, FOV=120, Smooth=5, TeamCheck=true, VisibleCheck=true, Triggerbot=false,
+        ESP=false, BoxESP=false, NameESP=false, DistESP=false, Tracer=false, Chams=false,
+        BSS={AutoFarm=false,AutoDig=false,AutoConvert=false,CollectTokens=true,KillBugs=true,ESP=true,Loaded=false},
+        LT2={AutoChop=false,AutoSell=false,Fly=false,ESP=true,Loaded=false},
     }
     local C = getgenv().Azno
 
@@ -122,18 +162,12 @@ local function openMenu()
     local function getHum() local c=getChar() return c and c:FindFirstChildOfClass("Humanoid") end
     local function getRoot() local c=getChar() return c and c:FindFirstChild("HumanoidRootPart") end
 
-    -- World loops
     local oldAmbient, oldBrightness, oldFog = Lighting.Ambient, Lighting.Brightness, Lighting.FogEnd
+
     RunService.Heartbeat:Connect(function()
-        if C.Fullbright then
-            Lighting.Ambient = Color3.new(1,1,1)
-            Lighting.Brightness = 2
-        end
-        if C.NoFog then Lighting.FogEnd = 1e6 end
-        if C.Gravity then
-            workspace.Gravity = 20
-        end
-        -- Character
+        if C.Fullbright then Lighting.Ambient=Color3.new(1,1,1) Lighting.Brightness=2 end
+        if C.NoFog then Lighting.FogEnd=1e6 end
+        if C.Gravity then workspace.Gravity=20 end
         local hum = getHum()
         if hum and C.Speed > 16 then hum.WalkSpeed = C.Speed end
         if C.Noclip then
@@ -147,80 +181,62 @@ local function openMenu()
         if C.InfJump then local h=getHum() if h then h:ChangeState(Enum.HumanoidStateType.Jumping) end end
     end)
 
-    -- Fly
     local flying, flyBV, flyBG = false, nil, nil
     local function stopFly()
-        flying = false
+        flying=false
         pcall(function() RunService:UnbindFromRenderStep("AznoFly") end)
         if flyBV then flyBV:Destroy() end
         if flyBG then flyBG:Destroy() end
     end
     local function startFly()
-        local root = getRoot()
+        local root=getRoot()
         if not root or flying then return end
-        flying = true
-        flyBV = Instance.new("BodyVelocity")
-        flyBV.MaxForce = Vector3.new(9e9,9e9,9e9)
-        flyBV.Velocity = Vector3.zero
-        flyBV.Parent = root
-        flyBG = Instance.new("BodyGyro")
-        flyBG.MaxTorque = Vector3.new(9e9,9e9,9e9)
-        flyBG.P = 9e4
-        flyBG.Parent = root
+        flying=true
+        flyBV=Instance.new("BodyVelocity") flyBV.MaxForce=Vector3.new(9e9,9e9,9e9) flyBV.Velocity=Vector3.zero flyBV.Parent=root
+        flyBG=Instance.new("BodyGyro") flyBG.MaxTorque=Vector3.new(9e9,9e9,9e9) flyBG.P=9e4 flyBG.Parent=root
         RunService:BindToRenderStep("AznoFly", Enum.RenderPriority.Camera.Value, function()
             if not C.Fly or not root.Parent then stopFly() return end
-            local cam = Camera.CFrame
-            local dir = Vector3.zero
-            if UserInputService:IsKeyDown(Enum.KeyCode.W) then dir = dir + cam.LookVector end
-            if UserInputService:IsKeyDown(Enum.KeyCode.S) then dir = dir - cam.LookVector end
-            if UserInputService:IsKeyDown(Enum.KeyCode.A) then dir = dir - cam.RightVector end
-            if UserInputService:IsKeyDown(Enum.KeyCode.D) then dir = dir + cam.RightVector end
-            if UserInputService:IsKeyDown(Enum.KeyCode.Space) then dir = dir + Vector3.new(0,1,0) end
-            if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then dir = dir - Vector3.new(0,1,0) end
-            flyBV.Velocity = dir.Magnitude > 0 and dir.Unit * 80 or Vector3.zero
-            flyBG.CFrame = cam
+            local cam=Camera.CFrame local dir=Vector3.zero
+            if UserInputService:IsKeyDown(Enum.KeyCode.W) then dir=dir+cam.LookVector end
+            if UserInputService:IsKeyDown(Enum.KeyCode.S) then dir=dir-cam.LookVector end
+            if UserInputService:IsKeyDown(Enum.KeyCode.A) then dir=dir-cam.RightVector end
+            if UserInputService:IsKeyDown(Enum.KeyCode.D) then dir=dir+cam.RightVector end
+            if UserInputService:IsKeyDown(Enum.KeyCode.Space) then dir=dir+Vector3.new(0,1,0) end
+            if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then dir=dir-Vector3.new(0,1,0) end
+            flyBV.Velocity = dir.Magnitude>0 and dir.Unit*80 or Vector3.zero
+            flyBG.CFrame=cam
         end)
     end
 
-    -- Player ESP
-    local pDraws = {}
+    local pDraws={}
     RunService.RenderStepped:Connect(function()
         for _,d in pairs(pDraws) do pcall(function() d:Remove() end) end
-        pDraws = {}
+        pDraws={}
         if not C.ESP then return end
-        for _, plr in pairs(Players:GetPlayers()) do
-            if plr ~= LocalPlayer and plr.Character then
-                local hrp = plr.Character:FindFirstChild("HumanoidRootPart")
-                local hum = plr.Character:FindFirstChildOfClass("Humanoid")
-                if hrp and hum and hum.Health > 0 then
-                    local pos, on = Camera:WorldToViewportPoint(hrp.Position)
+        for _,plr in pairs(Players:GetPlayers()) do
+            if plr~=LocalPlayer and plr.Character then
+                local hrp=plr.Character:FindFirstChild("HumanoidRootPart")
+                local hum=plr.Character:FindFirstChildOfClass("Humanoid")
+                if hrp and hum and hum.Health>0 then
+                    local pos,on=Camera:WorldToViewportPoint(hrp.Position)
                     if on then
                         if C.NameESP then
-                            local t = Drawing.new("Text")
-                            t.Text = plr.Name
-                            t.Size = 13 t.Center = true t.Outline = true
-                            t.Color = Color3.fromRGB(255,80,80)
-                            t.Position = Vector2.new(pos.X, pos.Y - 20)
-                            t.Visible = true
-                            table.insert(pDraws, t)
+                            local t=Drawing.new("Text") t.Text=plr.Name t.Size=13 t.Center=true t.Outline=true
+                            t.Color=Color3.fromRGB(255,80,80) t.Position=Vector2.new(pos.X,pos.Y-20) t.Visible=true
+                            table.insert(pDraws,t)
                         end
                         if C.DistESP then
-                            local dist = math.floor((hrp.Position - (getRoot() and getRoot().Position or hrp.Position)).Magnitude)
-                            local t = Drawing.new("Text")
-                            t.Text = dist .. "m"
-                            t.Size = 12 t.Center = true t.Outline = true
-                            t.Color = Color3.fromRGB(200,200,200)
-                            t.Position = Vector2.new(pos.X, pos.Y)
-                            t.Visible = true
-                            table.insert(pDraws, t)
+                            local dist=math.floor((hrp.Position-(getRoot() and getRoot().Position or hrp.Position)).Magnitude)
+                            local t=Drawing.new("Text") t.Text=dist.."m" t.Size=12 t.Center=true t.Outline=true
+                            t.Color=Color3.fromRGB(200,200,200) t.Position=Vector2.new(pos.X,pos.Y) t.Visible=true
+                            table.insert(pDraws,t)
                         end
                         if C.Tracer then
-                            local line = Drawing.new("Line")
-                            line.From = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y)
-                            line.To = Vector2.new(pos.X, pos.Y)
-                            line.Color = Color3.fromRGB(225,29,46)
-                            line.Thickness = 1 line.Visible = true
-                            table.insert(pDraws, line)
+                            local line=Drawing.new("Line")
+                            line.From=Vector2.new(Camera.ViewportSize.X/2,Camera.ViewportSize.Y)
+                            line.To=Vector2.new(pos.X,pos.Y)
+                            line.Color=Color3.fromRGB(225,29,46) line.Thickness=1 line.Visible=true
+                            table.insert(pDraws,line)
                         end
                     end
                 end
@@ -228,48 +244,41 @@ local function openMenu()
         end
     end)
 
-    -- BSS
     local function loadBSS()
         if C.BSS.Loaded then return end
-        C.BSS.Loaded = true
+        C.BSS.Loaded=true
         local function dig()
-            local tool = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Tool")
+            local tool=LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Tool")
             if tool and tool:FindFirstChild("ClickEvent") then pcall(function() tool.ClickEvent:FireServer() end) end
         end
         RunService.Heartbeat:Connect(function() if C.BSS.AutoDig then dig() end end)
         task.spawn(function()
-            while C.BSS.Loaded do
-                task.wait(1.5)
-                if C.BSS.AutoConvert then
-                    pcall(function() ReplicatedStorage.Events.PlayerActivesCommand:FireServer({["Name"]="Convert Pollens"}) end)
-                end
+            while C.BSS.Loaded do task.wait(1.5)
+                if C.BSS.AutoConvert then pcall(function() ReplicatedStorage.Events.PlayerActivesCommand:FireServer({["Name"]="Convert Pollens"}) end) end
             end
         end)
         task.spawn(function()
-            while C.BSS.Loaded do
-                task.wait(0.2)
+            while C.BSS.Loaded do task.wait(0.2)
                 if C.BSS.AutoFarm then
-                    local root = getRoot()
+                    local root=getRoot()
                     if root and C.BSS.CollectTokens then
-                        local folder = workspace:FindFirstChild("Collectibles")
+                        local folder=workspace:FindFirstChild("Collectibles")
                         if folder then
                             for _,v in pairs(folder:GetChildren()) do
-                                local part = v:IsA("BasePart") and v or v:FindFirstChild("Handle")
-                                if part and (part.Position-root.Position).Magnitude < 40 then
-                                    root.CFrame = CFrame.new(part.Position+Vector3.new(0,3,0))
-                                    task.wait(0.05)
+                                local part=v:IsA("BasePart") and v or v:FindFirstChild("Handle")
+                                if part and (part.Position-root.Position).Magnitude<40 then
+                                    root.CFrame=CFrame.new(part.Position+Vector3.new(0,3,0)) task.wait(0.05)
                                 end
                             end
                         end
                     end
                     if root and C.BSS.KillBugs then
-                        local monsters = workspace:FindFirstChild("Monsters")
+                        local monsters=workspace:FindFirstChild("Monsters")
                         if monsters then
                             for _,mob in pairs(monsters:GetChildren()) do
-                                local hrp = mob:FindFirstChild("HumanoidRootPart") or mob.PrimaryPart
-                                if hrp and (hrp.Position-root.Position).Magnitude < 80 then
-                                    root.CFrame = CFrame.new(hrp.Position+Vector3.new(0,8,0))
-                                    dig() task.wait(0.08)
+                                local hrp=mob:FindFirstChild("HumanoidRootPart") or mob.PrimaryPart
+                                if hrp and (hrp.Position-root.Position).Magnitude<80 then
+                                    root.CFrame=CFrame.new(hrp.Position+Vector3.new(0,8,0)) dig() task.wait(0.08)
                                 end
                             end
                         end
@@ -277,16 +286,15 @@ local function openMenu()
                 end
             end
         end)
-        local d = {}
+        local d={}
         RunService.RenderStepped:Connect(function()
-            for _,x in pairs(d) do pcall(function() x:Remove() end) end
-            d = {}
+            for _,x in pairs(d) do pcall(function() x:Remove() end) end d={}
             if not C.BSS.ESP then return end
             if workspace:FindFirstChild("Collectibles") then
                 for _,v in pairs(workspace.Collectibles:GetChildren()) do
-                    local part = v:IsA("BasePart") and v or v:FindFirstChild("Handle")
+                    local part=v:IsA("BasePart") and v or v:FindFirstChild("Handle")
                     if part then
-                        local pos,on = Camera:WorldToViewportPoint(part.Position)
+                        local pos,on=Camera:WorldToViewportPoint(part.Position)
                         if on then
                             local t=Drawing.new("Text") t.Text=v.Name t.Size=14 t.Center=true t.Outline=true
                             t.Color=Color3.fromRGB(255,220,50) t.Position=Vector2.new(pos.X,pos.Y) t.Visible=true
@@ -298,30 +306,25 @@ local function openMenu()
         end)
     end
 
-    -- LT2
     local function loadLT2()
         if C.LT2.Loaded then return end
-        C.LT2.Loaded = true
+        C.LT2.Loaded=true
         task.spawn(function()
-            while C.LT2.Loaded do
-                task.wait(0.15)
+            while C.LT2.Loaded do task.wait(0.15)
                 if C.LT2.AutoChop then
-                    local root = getRoot()
+                    local root=getRoot()
                     if root then
-                        local closest, dist = nil, 200
-                        for _, tree in pairs(workspace:GetDescendants()) do
+                        local closest,dist=nil,200
+                        for _,tree in pairs(workspace:GetDescendants()) do
                             if tree.Name:match("Tree") or tree.Name:match("Wood") or tree:FindFirstChild("CutEvent") then
-                                local part = tree:IsA("BasePart") and tree or tree.PrimaryPart or tree:FindFirstChildWhichIsA("BasePart")
-                                if part then
-                                    local dd = (part.Position-root.Position).Magnitude
-                                    if dd < dist then closest=tree dist=dd end
-                                end
+                                local part=tree:IsA("BasePart") and tree or tree.PrimaryPart or tree:FindFirstChildWhichIsA("BasePart")
+                                if part then local dd=(part.Position-root.Position).Magnitude if dd<dist then closest=tree dist=dd end end
                             end
                         end
                         if closest then
-                            local part = closest.PrimaryPart or closest:FindFirstChildWhichIsA("BasePart")
+                            local part=closest.PrimaryPart or closest:FindFirstChildWhichIsA("BasePart")
                             if part then
-                                root.CFrame = CFrame.new(part.Position+Vector3.new(0,5,0))
+                                root.CFrame=CFrame.new(part.Position+Vector3.new(0,5,0))
                                 pcall(function()
                                     if closest:FindFirstChild("CutEvent") then closest.CutEvent:FireServer() end
                                     if ReplicatedStorage:FindFirstChild("Remotes") and ReplicatedStorage.Remotes:FindFirstChild("Cut") then
@@ -335,8 +338,7 @@ local function openMenu()
             end
         end)
         task.spawn(function()
-            while C.LT2.Loaded do
-                task.wait(3)
+            while C.LT2.Loaded do task.wait(3)
                 if C.LT2.AutoSell then
                     pcall(function()
                         if ReplicatedStorage:FindFirstChild("Remotes") and ReplicatedStorage.Remotes:FindFirstChild("SellWood") then
@@ -346,17 +348,16 @@ local function openMenu()
                 end
             end
         end)
-        local d = {}
+        local d={}
         RunService.RenderStepped:Connect(function()
-            for _,x in pairs(d) do pcall(function() x:Remove() end) end
-            d = {}
+            for _,x in pairs(d) do pcall(function() x:Remove() end) end d={}
             if not C.LT2.ESP then return end
             for _,obj in pairs(workspace:GetDescendants()) do
                 if obj.Name:match("Tree") or obj.Name:match("Wood") then
-                    local part = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
+                    local part=obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
                     if part then
-                        local pos,on = Camera:WorldToViewportPoint(part.Position)
-                        if on and pos.Z > 0 then
+                        local pos,on=Camera:WorldToViewportPoint(part.Position)
+                        if on and pos.Z>0 then
                             local t=Drawing.new("Text") t.Text=obj.Name t.Size=13 t.Center=true t.Outline=true
                             t.Color=Color3.fromRGB(80,255,120) t.Position=Vector2.new(pos.X,pos.Y) t.Visible=true
                             table.insert(d,t)
@@ -375,25 +376,44 @@ local function openMenu()
     Gui.Parent = game:GetService("CoreGui")
 
     local Main = Instance.new("Frame")
-    Main.Size = UDim2.new(0, 560, 0, 380)
-    Main.Position = UDim2.new(0.5, -280, 0.5, -190)
+    Main.Size = UDim2.new(0, 0, 0, 0)
+    Main.Position = UDim2.new(0.5, 0, 0.5, 0)
+    Main.AnchorPoint = Vector2.new(0.5, 0.5)
     Main.BackgroundColor3 = Color3.fromRGB(16, 16, 22)
     Main.BorderSizePixel = 0
     Main.Active = true
     Main.Draggable = true
+    Main.ClipsDescendants = true
     Main.Parent = Gui
-    Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 10)
+    Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 12)
+
     local Stroke = Instance.new("UIStroke")
-    Stroke.Color = Color3.fromRGB(40, 40, 52)
-    Stroke.Thickness = 1
+    Stroke.Color = Color3.fromRGB(225, 29, 46)
+    Stroke.Thickness = 1.5
+    Stroke.Transparency = 1
     Stroke.Parent = Main
 
+    -- open animation
+    tween(Main, {Size = UDim2.new(0, 560, 0, 380)}, 0.35, Enum.EasingStyle.Back)
+    tween(Stroke, {Transparency = 0.55}, 0.4)
+
+    -- ambient glow pulse
+    task.spawn(function()
+        while Main.Parent do
+            tween(Stroke, {Transparency = 0.35, Color = Color3.fromRGB(255, 50, 70)}, 1.2)
+            task.wait(1.2)
+            tween(Stroke, {Transparency = 0.65, Color = Color3.fromRGB(225, 29, 46)}, 1.2)
+            task.wait(1.2)
+        end
+    end)
+
+    -- Sidebar
     local Side = Instance.new("Frame")
     Side.Size = UDim2.new(0, 130, 1, 0)
     Side.BackgroundColor3 = Color3.fromRGB(12, 12, 16)
     Side.BorderSizePixel = 0
     Side.Parent = Main
-    Instance.new("UICorner", Side).CornerRadius = UDim.new(0, 10)
+    Instance.new("UICorner", Side).CornerRadius = UDim.new(0, 12)
     local SideFix = Instance.new("Frame")
     SideFix.Size = UDim2.new(0, 14, 1, 0)
     SideFix.Position = UDim2.new(1, -14, 0, 0)
@@ -408,15 +428,36 @@ local function openMenu()
     Logo.TextColor3 = Color3.fromRGB(225, 29, 46)
     Logo.Font = Enum.Font.GothamBold
     Logo.TextSize = 12
+    Logo.TextTransparency = 1
     Logo.Parent = Side
+    tween(Logo, {TextTransparency = 0}, 0.5)
+
+    -- accent line under logo
+    local Accent = Instance.new("Frame")
+    Accent.Size = UDim2.new(0, 0, 0, 2)
+    Accent.Position = UDim2.new(0.5, 0, 0, 40)
+    Accent.AnchorPoint = Vector2.new(0.5, 0)
+    Accent.BackgroundColor3 = Color3.fromRGB(225, 29, 46)
+    Accent.BorderSizePixel = 0
+    Accent.Parent = Side
+    Instance.new("UICorner", Accent).CornerRadius = UDim.new(1, 0)
+    tween(Accent, {Size = UDim2.new(0, 60, 0, 2)}, 0.45, Enum.EasingStyle.Back)
 
     local tabs = {"World", "Character", "Aim", "Visuals", "Games"}
     local tabBtns, pages = {}, {}
+    local tabIndicator = Instance.new("Frame")
+    tabIndicator.Size = UDim2.new(0, 3, 0, 24)
+    tabIndicator.Position = UDim2.new(0, 0, 0, 52)
+    tabIndicator.BackgroundColor3 = Color3.fromRGB(225, 29, 46)
+    tabIndicator.BorderSizePixel = 0
+    tabIndicator.Parent = Side
+    Instance.new("UICorner", tabIndicator).CornerRadius = UDim.new(1, 0)
 
     local Content = Instance.new("Frame")
     Content.Size = UDim2.new(1, -140, 1, -12)
     Content.Position = UDim2.new(0, 136, 0, 6)
     Content.BackgroundTransparency = 1
+    Content.ClipsDescendants = true
     Content.Parent = Main
 
     local function makePage(name)
@@ -437,12 +478,24 @@ local function openMenu()
     for _,n in ipairs(tabs) do makePage(n) end
     pages["World"].Visible = true
 
-    local function switchTab(name)
-        for n,p in pairs(pages) do p.Visible = (n==name) end
-        for n,b in pairs(tabBtns) do
-            b.BackgroundColor3 = (n==name) and Color3.fromRGB(225,29,46) or Color3.fromRGB(12,12,16)
-            b.TextColor3 = (n==name) and Color3.fromRGB(255,255,255) or Color3.fromRGB(140,140,155)
+    local function switchTab(name, idx)
+        for n,p in pairs(pages) do
+            if n == name then
+                p.Visible = true
+                p.Position = UDim2.new(0, 20, 0, 0)
+                tween(p, {Position = UDim2.new(0, 0, 0, 0)}, 0.2)
+            else
+                p.Visible = false
+            end
         end
+        for n,b in pairs(tabBtns) do
+            if n == name then
+                tween(b, {BackgroundColor3 = Color3.fromRGB(225,29,46), TextColor3 = Color3.fromRGB(255,255,255)}, 0.15)
+            else
+                tween(b, {BackgroundColor3 = Color3.fromRGB(12,12,16), TextColor3 = Color3.fromRGB(140,140,155)}, 0.15)
+            end
+        end
+        tween(tabIndicator, {Position = UDim2.new(0, 0, 0, 52 + (idx-1)*38)}, 0.2, Enum.EasingStyle.Quad)
     end
 
     for i,name in ipairs(tabs) do
@@ -456,9 +509,24 @@ local function openMenu()
         b.TextSize = 12
         b.TextXAlignment = Enum.TextXAlignment.Left
         b.BorderSizePixel = 0
+        b.BackgroundTransparency = 1
+        b.TextTransparency = 1
         b.Parent = Side
         Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
-        b.MouseButton1Click:Connect(function() switchTab(name) end)
+        task.delay(0.08*i, function()
+            tween(b, {BackgroundTransparency = 0, TextTransparency = 0}, 0.25)
+        end)
+        b.MouseEnter:Connect(function()
+            if tabBtns[name] and pages[name] and not pages[name].Visible then
+                tween(b, {BackgroundColor3 = Color3.fromRGB(28,28,36)}, 0.1)
+            end
+        end)
+        b.MouseLeave:Connect(function()
+            if not pages[name].Visible then
+                tween(b, {BackgroundColor3 = Color3.fromRGB(12,12,16)}, 0.1)
+            end
+        end)
+        b.MouseButton1Click:Connect(function() switchTab(name, i) end)
         tabBtns[name] = b
     end
 
@@ -485,6 +553,7 @@ local function openMenu()
         row.BorderSizePixel = 0
         row.Parent = page
         Instance.new("UICorner", row).CornerRadius = UDim.new(0, 6)
+
         local name = Instance.new("TextLabel")
         name.Size = UDim2.new(1, -56, 1, 0)
         name.Position = UDim2.new(0, 12, 0, 0)
@@ -495,6 +564,7 @@ local function openMenu()
         name.TextSize = 12
         name.TextXAlignment = Enum.TextXAlignment.Left
         name.Parent = row
+
         local sw = Instance.new("TextButton")
         sw.Size = UDim2.new(0, 36, 0, 18)
         sw.Position = UDim2.new(1, -46, 0.5, -9)
@@ -503,6 +573,7 @@ local function openMenu()
         sw.BorderSizePixel = 0
         sw.Parent = row
         Instance.new("UICorner", sw).CornerRadius = UDim.new(1, 0)
+
         local knob = Instance.new("Frame")
         knob.Size = UDim2.new(0, 14, 0, 14)
         knob.Position = cfg[key] and UDim2.new(1,-16,0.5,-7) or UDim2.new(0,2,0.5,-7)
@@ -510,12 +581,31 @@ local function openMenu()
         knob.BorderSizePixel = 0
         knob.Parent = sw
         Instance.new("UICorner", knob).CornerRadius = UDim.new(1, 0)
+
+        -- hover glow on row
+        row.MouseEnter:Connect(function()
+            tween(row, {BackgroundColor3 = Color3.fromRGB(28, 28, 38)}, 0.12)
+        end)
+        row.MouseLeave:Connect(function()
+            tween(row, {BackgroundColor3 = Color3.fromRGB(22, 22, 30)}, 0.12)
+        end)
+
         sw.MouseButton1Click:Connect(function()
             cfg[key] = not cfg[key]
-            sw.BackgroundColor3 = cfg[key] and Color3.fromRGB(225,29,46) or Color3.fromRGB(50,50,62)
-            TweenService:Create(knob, TweenInfo.new(0.12), {
-                Position = cfg[key] and UDim2.new(1,-16,0.5,-7) or UDim2.new(0,2,0.5,-7)
-            }):Play()
+            tween(sw, {BackgroundColor3 = cfg[key] and Color3.fromRGB(225,29,46) or Color3.fromRGB(50,50,62)}, 0.15)
+            tween(knob, {Position = cfg[key] and UDim2.new(1,-16,0.5,-7) or UDim2.new(0,2,0.5,-7)}, 0.15, Enum.EasingStyle.Back)
+            -- flash
+            if cfg[key] then
+                local flash = Instance.new("Frame")
+                flash.Size = UDim2.new(1, 0, 1, 0)
+                flash.BackgroundColor3 = Color3.fromRGB(225, 29, 46)
+                flash.BackgroundTransparency = 0.7
+                flash.BorderSizePixel = 0
+                flash.Parent = row
+                Instance.new("UICorner", flash).CornerRadius = UDim.new(0, 6)
+                tween(flash, {BackgroundTransparency = 1}, 0.35)
+                task.delay(0.4, function() flash:Destroy() end)
+            end
             if onChange then onChange(cfg[key]) end
         end)
     end
@@ -548,9 +638,13 @@ local function openMenu()
             b.TextSize = 14
             b.Parent = row
             Instance.new("UICorner", b).CornerRadius = UDim.new(0, 4)
+            b.MouseEnter:Connect(function() tween(b, {BackgroundColor3 = Color3.fromRGB(225,29,46)}, 0.1) end)
+            b.MouseLeave:Connect(function() tween(b, {BackgroundColor3 = Color3.fromRGB(40,40,52)}, 0.1) end)
             b.MouseButton1Click:Connect(function()
                 cfg[key] = math.clamp(cfg[key] + d, minV, maxV)
                 lbl.Text = label .. ": " .. tostring(cfg[key])
+                tween(lbl, {TextColor3 = Color3.fromRGB(255,100,110)}, 0.08)
+                task.delay(0.15, function() tween(lbl, {TextColor3 = Color3.fromRGB(210,210,220)}, 0.2) end)
             end)
         end
         mk("-", -64, -step)
@@ -559,16 +653,10 @@ local function openMenu()
 
     -- WORLD
     section(pages["World"], "ENVIRONMENT")
-    toggle(pages["World"], C, "Fullbright", "Fullbright", function(v)
-        if not v then Lighting.Ambient=oldAmbient Lighting.Brightness=oldBrightness end
-    end)
-    toggle(pages["World"], C, "No Fog", "NoFog", function(v)
-        if not v then Lighting.FogEnd=oldFog end
-    end)
+    toggle(pages["World"], C, "Fullbright", "Fullbright", function(v) if not v then Lighting.Ambient=oldAmbient Lighting.Brightness=oldBrightness end end)
+    toggle(pages["World"], C, "No Fog", "NoFog", function(v) if not v then Lighting.FogEnd=oldFog end end)
     toggle(pages["World"], C, "X-Ray (translucent)", "XRay")
-    toggle(pages["World"], C, "Low Gravity", "Gravity", function(v)
-        workspace.Gravity = v and 20 or 196.2
-    end)
+    toggle(pages["World"], C, "Low Gravity", "Gravity", function(v) workspace.Gravity = v and 20 or 196.2 end)
 
     -- CHARACTER
     section(pages["Character"], "MOVEMENT")
@@ -615,25 +703,47 @@ local function openMenu()
     toggle(pages["Games"], C.LT2, "Auto Sell", "AutoSell")
     toggle(pages["Games"], C.LT2, "Tree ESP", "ESP")
 
+    -- toggle open/close with scale anim
+    local menuOpen = true
     UserInputService.InputBegan:Connect(function(input, gpe)
         if gpe then return end
         if input.KeyCode == Enum.KeyCode.Insert then
-            Main.Visible = not Main.Visible
+            menuOpen = not menuOpen
+            if menuOpen then
+                Main.Visible = true
+                Main.Size = UDim2.new(0, 0, 0, 0)
+                tween(Main, {Size = UDim2.new(0, 560, 0, 380)}, 0.3, Enum.EasingStyle.Back)
+                tween(Stroke, {Transparency = 0.55}, 0.3)
+            else
+                tween(Main, {Size = UDim2.new(0, 0, 0, 0)}, 0.2)
+                tween(Stroke, {Transparency = 1}, 0.2)
+                task.delay(0.22, function() Main.Visible = false end)
+            end
         end
     end)
 
-    print("[AznoCheats] multi-tab loaded — INSERT to toggle")
+    print("[AznoCheats] loaded with animations — INSERT to toggle")
 end
 
 AuthBtn.MouseButton1Click:Connect(function()
     if checkKey(AuthBox.Text) then
         AuthStatus.TextColor3 = Color3.fromRGB(34, 197, 94)
         AuthStatus.Text = "Key accepted"
-        task.wait(0.35)
+        tween(AuthStroke, {Color = Color3.fromRGB(34,197,94), Transparency = 0.2}, 0.2)
+        task.wait(0.4)
         openMenu()
     else
         AuthStatus.TextColor3 = Color3.fromRGB(225, 29, 46)
         AuthStatus.Text = "Invalid key"
+        -- shake
+        local orig = AuthBg.Position
+        for i=1,4 do
+            AuthBg.Position = orig + UDim2.new(0, (i%2==0 and 6 or -6), 0, 0)
+            task.wait(0.04)
+        end
+        AuthBg.Position = orig
+        tween(AuthStroke, {Transparency = 0.15}, 0.1)
+        task.delay(0.5, function() tween(AuthStroke, {Transparency = 0.5}, 0.3) end)
     end
 end)
 AuthBox.FocusLost:Connect(function(e) if e then AuthBtn.MouseButton1Click:Fire() end end)
