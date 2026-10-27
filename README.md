@@ -1,30 +1,39 @@
 # roblox-bench-suite
 
-Private bench plates:
+Private functional suite for late 2026.
 
-- **Bee Swarm Simulator** full Lua cheat
-- **Lumber Tycoon 2** full Lua cheat
-- **Modern external executor** skeleton (C++ ImGui + pipe + payload)
-- **Hyperion / Byfron** bypass craft notes (2026-2027 reality)
+## Quick Start (recommended)
 
-## Presentation site
+1. Get a current high-sUNC executor:
+ - **Best overall right now:** Volt (Hyperion emulation) or Potassium (lifetime)
+ - Solid free: Solara / Xeno / Madium
+2. Join Bee Swarm Simulator or Lumber Tycoon 2
+3. Execute the matching script from `/cheats`
 
-Open the static presentation:
+## Contents
 
-- Local: open `docs/index.html`
-- GitHub Pages: enable Pages on the `docs` folder (Settings → Pages → Deploy from branch → `/docs`)
+```
+cheats/
+  bee_swarm_simulator.lua   ← full auto farm + ESP + movement
+  lumber_tycoon_2.lua       ← auto chop/sell + fly + ESP
+executor/
+  ModernExecutor.cpp        ← ImGui external shell
+  ModernExecPayload.cpp     ← payload skeleton
+docs/
+  CURRENT_STATUS.md         ← October 2026 live ranking
+  hyperion_bypass.md        ← current private craft notes
+  index.html                ← presentation site
+```
 
-## 2026 / 2027 status
+## October 2026 Status
 
 | Component | Status |
-|-----------|--------|
-| Game scripts (BSS / LT2) | Working (re-spy remotes after updates) |
-| Executor UI + pipe | Working |
-| Classic LoadLibrary | Dead |
-| Public mappers | Dead / short life |
-| Private syscall + stomp + stack spoof | Viable with maintenance |
-| Luau scheduler core | Viable with maintenance |
+|---------|--------|
+| BSS / LT2 scripts | Functional on Volt / Potassium / Wave / Solara / Xeno |
+| Classic public inject | Dead |
+| Hyperion emulation (Volt-style) | Currently strongest public-facing approach |
+| Fully private core | Still requires maintained private modules |
 
-Public methods die fast. The private baseline described in `docs/hyperion_bypass.md` is what still lands. Keep the private modules updated after every Roblox client change.
+See `docs/CURRENT_STATUS.md` for the full live picture.
 
-**Use at your own risk. Private repo.**
+**Always use an alt. Nothing is permanently safe.**
