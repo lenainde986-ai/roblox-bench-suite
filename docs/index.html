@@ -3,31 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Roblox Bench Suite — Oct 2026</title>
+<title>AznoCheats</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0b0d10; --surface: #12151a; --border: #1e242c;
     --text: #e6edf3; --muted: #8b949e; --accent: #3fb950;
-    --accent2: #58a6ff; --warning: #d29922; --danger: #f85149;
+    --warning: #d29922; --danger: #f85149;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-  .mono { font-family:'JetBrains Mono',monospace; }
   header { border-bottom:1px solid var(--border); padding:1.25rem 2rem; display:flex; align-items:center; justify-content:space-between; background:var(--surface); position:sticky; top:0; z-index:50; }
-  .logo { font-family:'JetBrains Mono',monospace; font-weight:700; font-size:1.1rem; }
+  .logo { font-family:'JetBrains Mono',monospace; font-weight:700; font-size:1.15rem; }
   .logo span { color:var(--accent); }
   nav a { color:var(--muted); text-decoration:none; margin-left:1.4rem; font-size:0.9rem; }
   nav a:hover { color:var(--text); }
   .hero { max-width:960px; margin:0 auto; padding:3.5rem 2rem 2.5rem; }
-  .hero h1 { font-size:2.2rem; font-weight:700; letter-spacing:-0.03em; margin-bottom:0.6rem; }
-  .hero p { color:var(--muted); font-size:1.05rem; max-width:580px; }
+  .hero h1 { font-size:2.3rem; font-weight:700; letter-spacing:-0.03em; margin-bottom:0.6rem; }
+  .hero p { color:var(--muted); font-size:1.05rem; max-width:540px; }
   .badge { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:0.72rem; padding:0.22rem 0.55rem; border-radius:999px; background:rgba(63,185,80,0.12); color:var(--accent); border:1px solid rgba(63,185,80,0.25); margin-bottom:1.1rem; }
   .grid { max-width:960px; margin:0 auto; padding:0 2rem 3rem; display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:1.1rem; }
   .card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.35rem; }
-  .card h3 { font-size:1rem; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.45rem; }
+  .card h3 { font-size:1rem; margin-bottom:0.35rem; }
   .card p { color:var(--muted); font-size:0.88rem; }
-  .tag { font-family:'JetBrains Mono',monospace; font-size:0.68rem; padding:0.12rem 0.4rem; border-radius:4px; background:#21262d; color:var(--muted); }
+  .tag { font-family:'JetBrains Mono',monospace; font-size:0.68rem; padding:0.12rem 0.4rem; border-radius:4px; background:#21262d; color:var(--muted); margin-right:0.4rem; }
   .section { max-width:960px; margin:0 auto; padding:0 2rem 2.5rem; }
   .section h2 { font-size:1.25rem; margin-bottom:0.9rem; }
   table { width:100%; border-collapse:collapse; font-size:0.88rem; }
@@ -36,12 +35,11 @@
   .ok { color:var(--accent); } .warn { color:var(--warning); } .dead { color:var(--danger); }
   footer { border-top:1px solid var(--border); padding:1.75rem; text-align:center; color:var(--muted); font-size:0.82rem; }
   .cta { display:inline-block; margin-top:1.3rem; padding:0.6rem 1.15rem; background:var(--accent); color:#0b0d10; font-weight:600; font-size:0.88rem; border-radius:6px; text-decoration:none; }
-  code { font-family:'JetBrains Mono',monospace; font-size:0.82em; background:#21262d; padding:0.12rem 0.35rem; border-radius:4px; }
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">roblox<span>-bench</span></div>
+  <div class="logo">Azno<span>Cheats</span></div>
   <nav>
     <a href="#status">Status</a>
     <a href="#plates">Plates</a>
@@ -50,49 +48,46 @@
 </header>
 
 <section class="hero">
-  <div class="badge">OCTOBER 2026 · LIVE</div>
-  <h1>Roblox Bench Suite</h1>
-  <p>Functional Bee Swarm + Lumber Tycoon scripts, modern executor skeleton, and the current best path that still lands under Hyperion.</p>
+  <div class="badge">PRIVATE · AUTHKEY · OCT 2026</div>
+  <h1>AznoCheats</h1>
+  <p>Private Bee Swarm + Lumber Tycoon suite with AuthKey lock. Built for current high-sUNC executors.</p>
   <a class="cta" href="https://github.com/lenainde986-ai/roblox-bench-suite" target="_blank">Open Repository</a>
 </section>
 
 <section class="section" id="status">
-  <h2>Best options right now</h2>
+  <h2>Recommended executors</h2>
   <table>
-    <thead><tr><th>Executor</th><th>sUNC</th><th>Status</th><th>Notes</th></tr></thead>
+    <thead><tr><th>Executor</th><th>sUNC</th><th>Notes</th></tr></thead>
     <tbody>
-      <tr><td><strong>Volt</strong></td><td class="ok">100%</td><td class="warn">Partial / Client-mod</td><td>Hyperion emulation — currently strongest feature set</td></tr>
-      <tr><td><strong>Potassium</strong></td><td class="ok">100%</td><td class="ok">Active</td><td>Lifetime, clean, recommended</td></tr>
-      <tr><td><strong>Wave</strong></td><td class="ok">100%</td><td class="ok">Active</td><td>Strong internal</td></tr>
-      <tr><td>Serotonin / Matcha / Lumen</td><td>—</td><td class="ok">Undetected*</td><td>Externals</td></tr>
-      <tr><td>Solara / Xeno / Madium</td><td>High</td><td class="ok">Working</td><td>Best free keyless</td></tr>
-      <tr><td>Classic LoadLibrary</td><td>—</td><td class="dead">Dead</td><td>Instantly flagged</td></tr>
+      <tr><td><strong>Volt</strong></td><td class="ok">100%</td><td>Hyperion emulation — strongest feature set</td></tr>
+      <tr><td><strong>Potassium</strong></td><td class="ok">100%</td><td>Lifetime, clean</td></tr>
+      <tr><td><strong>Wave</strong></td><td class="ok">100%</td><td>Strong internal</td></tr>
+      <tr><td>Solara / Xeno / Madium</td><td class="ok">High</td><td>Best free options</td></tr>
     </tbody>
   </table>
-  <p style="margin-top:1rem;color:var(--muted);font-size:0.88rem;">* "Undetected" is never permanent. Always use an alt. Ban waves still hit.</p>
 </section>
 
 <section class="grid" id="plates">
   <div class="card">
     <h3><span class="tag">LUA</span> Bee Swarm</h3>
-    <p>Auto farm, dig, convert, tokens, bugs, ESP, speed, inf jump, noclip. Ready for Volt / Potassium / Wave.</p>
+    <p>Auto farm, dig, convert, tokens, bugs, ESP, movement. AuthKey locked.</p>
   </div>
   <div class="card">
     <h3><span class="tag">LUA</span> Lumber Tycoon 2</h3>
-    <p>Auto chop, auto sell, fly, ESP, movement. Same compatibility target.</p>
+    <p>Auto chop, sell, fly, ESP, movement. AuthKey locked.</p>
+  </div>
+  <div class="card">
+    <h3><span class="tag">KEY</span> AuthKey</h3>
+    <p>Set your private key at the top of each script. Optional remote key list supported.</p>
   </div>
   <div class="card">
     <h3><span class="tag">C++</span> Executor Shell</h3>
-    <p>Clean ImGui + named-pipe external. Real Hyperion core still private work.</p>
-  </div>
-  <div class="card">
-    <h3><span class="tag">META</span> Current Path</h3>
-    <p>Use Volt or Potassium today. Emulation + isolation is the strongest private direction.</p>
+    <p>ImGui external + pipe skeleton. Private Hyperion core still required for full inject.</p>
   </div>
 </section>
 
 <footer>
-  Private suite · Updated 27 Oct 2026 · Nothing is permanently undetected
+  AznoCheats · Private suite · Always use an alt
 </footer>
 </body>
 </html>

@@ -1,4 +1,4 @@
--- Bee Swarm Simulator Cheat Suite
+-- AznoCheats · Bee Swarm Simulator
 -- Private build with AuthKey
 
 --[[
@@ -9,8 +9,7 @@
 local AUTH_KEY = "CHANGE_ME_TO_YOUR_PRIVATE_KEY"
 
 -- Optional: remote key list (raw text file, one key per line)
--- Leave empty "" to disable remote check and use only the local key above.
-local REMOTE_KEY_URL = "" -- example: "https://raw.githubusercontent.com/youruser/keys/main/bss.txt"
+local REMOTE_KEY_URL = ""
 
 local function checkKey(input)
     if type(input) ~= "string" or input == "" then return false end
@@ -31,7 +30,6 @@ local function checkKey(input)
     return false
 end
 
--- Simple key prompt
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
@@ -41,21 +39,21 @@ local VirtualUser = game:GetService("VirtualUser")
 local Camera = workspace.CurrentCamera
 
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "BSSAuth"
+ScreenGui.Name = "AznoAuth"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = game:GetService("CoreGui")
 
 local Frame = Instance.new("Frame")
 Frame.Size = UDim2.new(0, 320, 0, 140)
 Frame.Position = UDim2.new(0.5, -160, 0.5, -70)
-Frame.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+Frame.BackgroundColor3 = Color3.fromRGB(14, 14, 18)
 Frame.BorderSizePixel = 0
 Frame.Parent = ScreenGui
 
 local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1, 0, 0, 32)
-Title.BackgroundColor3 = Color3.fromRGB(30, 30, 38)
-Title.Text = "BSS Private · Enter Key"
+Title.BackgroundColor3 = Color3.fromRGB(28, 28, 36)
+Title.Text = "AznoCheats · BSS · Enter Key"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 14
@@ -64,7 +62,7 @@ Title.Parent = Frame
 local Box = Instance.new("TextBox")
 Box.Size = UDim2.new(1, -24, 0, 32)
 Box.Position = UDim2.new(0, 12, 0, 48)
-Box.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
+Box.BackgroundColor3 = Color3.fromRGB(26, 26, 32)
 Box.TextColor3 = Color3.fromRGB(220, 220, 220)
 Box.PlaceholderText = "Auth Key..."
 Box.Font = Enum.Font.Gotham
@@ -86,7 +84,7 @@ Status.Parent = Frame
 local Btn = Instance.new("TextButton")
 Btn.Size = UDim2.new(1, -24, 0, 28)
 Btn.Position = UDim2.new(0, 12, 0, 108)
-Btn.BackgroundColor3 = Color3.fromRGB(40, 90, 50)
+Btn.BackgroundColor3 = Color3.fromRGB(45, 95, 55)
 Btn.Text = "Unlock"
 Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
 Btn.Font = Enum.Font.GothamBold
@@ -269,16 +267,15 @@ local function startCheat()
         end
     end)
 
-    -- UI
     local Menu = Instance.new("ScreenGui")
-    Menu.Name = "BSSMenu"
+    Menu.Name = "AznoBSS"
     Menu.ResetOnSpawn = false
     Menu.Parent = game:GetService("CoreGui")
 
     local MFrame = Instance.new("Frame")
     MFrame.Size = UDim2.new(0, 220, 0, 280)
     MFrame.Position = UDim2.new(0, 20, 0.3, 0)
-    MFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+    MFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 24)
     MFrame.BorderSizePixel = 0
     MFrame.Active = true
     MFrame.Draggable = true
@@ -286,18 +283,18 @@ local function startCheat()
 
     local MTitle = Instance.new("TextLabel")
     MTitle.Size = UDim2.new(1, 0, 0, 28)
-    MTitle.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
-    MTitle.Text = "BSS Private | INSERT"
+    MTitle.BackgroundColor3 = Color3.fromRGB(36, 36, 48)
+    MTitle.Text = "AznoCheats BSS | INSERT"
     MTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
     MTitle.Font = Enum.Font.GothamBold
-    MTitle.TextSize = 14
+    MTitle.TextSize = 13
     MTitle.Parent = MFrame
 
     local function makeToggle(name, y, key)
         local btn = Instance.new("TextButton")
         btn.Size = UDim2.new(1, -16, 0, 26)
         btn.Position = UDim2.new(0, 8, 0, y)
-        btn.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+        btn.BackgroundColor3 = Color3.fromRGB(32, 32, 42)
         btn.TextColor3 = Color3.fromRGB(200, 200, 200)
         btn.Font = Enum.Font.Gotham
         btn.TextSize = 13
@@ -306,7 +303,7 @@ local function startCheat()
         btn.MouseButton1Click:Connect(function()
             BSS[key] = not BSS[key]
             btn.Text = name .. ": " .. (BSS[key] and "ON" or "OFF")
-            btn.BackgroundColor3 = BSS[key] and Color3.fromRGB(30, 80, 40) or Color3.fromRGB(35, 35, 45)
+            btn.BackgroundColor3 = BSS[key] and Color3.fromRGB(30, 85, 45) or Color3.fromRGB(32, 32, 42)
         end)
     end
 
@@ -326,7 +323,7 @@ local function startCheat()
         end
     end)
 
-    print("[BSS Private] unlocked — INSERT to toggle menu")
+    print("[AznoCheats] BSS unlocked — INSERT to toggle menu")
 end
 
 Btn.MouseButton1Click:Connect(function()
@@ -343,7 +340,5 @@ Btn.MouseButton1Click:Connect(function()
 end)
 
 Box.FocusLost:Connect(function(enter)
-    if enter then
-        Btn.MouseButton1Click:Fire()
-    end
+    if enter then Btn.MouseButton1Click:Fire() end
 end)
