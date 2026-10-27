@@ -1,5 +1,5 @@
 -- AznoCheats
--- Press INSERT to open the panel
+-- Velvet-style auth · Panel opens after key
 
 local AUTH_KEY = "CHANGE_ME_TO_YOUR_PRIVATE_KEY"
 local REMOTE_KEY_URL = ""
@@ -35,95 +35,267 @@ local function tween(obj, props, t, style, dir)
     return tw
 end
 
--- AUTH
+-- ===================== VELVET-STYLE AUTH ===================== --
 local AuthGui = Instance.new("ScreenGui")
 AuthGui.Name = "AznoAuth"
 AuthGui.ResetOnSpawn = false
 AuthGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 AuthGui.Parent = game:GetService("CoreGui")
 
-local AuthBg = Instance.new("Frame")
-AuthBg.Size = UDim2.new(0, 340, 0, 160)
-AuthBg.Position = UDim2.new(0.5, -170, 0.5, -80)
-AuthBg.BackgroundColor3 = Color3.fromRGB(18, 18, 24)
-AuthBg.BorderSizePixel = 0
-AuthBg.BackgroundTransparency = 1
-AuthBg.Parent = AuthGui
-Instance.new("UICorner", AuthBg).CornerRadius = UDim.new(0, 10)
-local AuthStroke = Instance.new("UIStroke")
-AuthStroke.Color = Color3.fromRGB(225, 29, 46)
-AuthStroke.Thickness = 1
-AuthStroke.Transparency = 1
-AuthStroke.Parent = AuthBg
-task.spawn(function()
-    while AuthGui.Parent do
-        tween(AuthStroke, {Transparency = 0.3}, 0.8) task.wait(0.8)
-        tween(AuthStroke, {Transparency = 0.7}, 0.8) task.wait(0.8)
-    end
+-- Full dim overlay
+local Overlay = Instance.new("Frame")
+Overlay.Size = UDim2.new(1, 0, 1, 0)
+Overlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Overlay.BackgroundTransparency = 1
+Overlay.BorderSizePixel = 0
+Overlay.Parent = AuthGui
+tween(Overlay, {BackgroundTransparency = 0.45}, 0.35)
+
+-- Main card
+local Card = Instance.new("Frame")
+Card.Size = UDim2.new(0, 420, 0, 280)
+Card.Position = UDim2.new(0.5, 0, 0.5, 0)
+Card.AnchorPoint = Vector2.new(0.5, 0.5)
+Card.BackgroundColor3 = Color3.fromRGB(22, 24, 32)
+Card.BorderSizePixel = 0
+Card.BackgroundTransparency = 1
+Card.Parent = AuthGui
+Instance.new("UICorner", Card).CornerRadius = UDim.new(0, 14)
+local CardStroke = Instance.new("UIStroke")
+CardStroke.Color = Color3.fromRGB(50, 54, 70)
+CardStroke.Thickness = 1
+CardStroke.Transparency = 1
+CardStroke.Parent = Card
+tween(Card, {BackgroundTransparency = 0}, 0.35)
+tween(CardStroke, {Transparency = 0}, 0.4)
+
+-- Top bar
+local TopBar = Instance.new("Frame")
+TopBar.Size = UDim2.new(1, 0, 0, 48)
+TopBar.BackgroundColor3 = Color3.fromRGB(28, 30, 40)
+TopBar.BorderSizePixel = 0
+TopBar.Parent = Card
+Instance.new("UICorner", TopBar).CornerRadius = UDim.new(0, 14)
+local TopFix = Instance.new("Frame")
+TopFix.Size = UDim2.new(1, 0, 0, 16)
+TopFix.Position = UDim2.new(0, 0, 1, -16)
+TopFix.BackgroundColor3 = Color3.fromRGB(28, 30, 40)
+TopFix.BorderSizePixel = 0
+TopFix.Parent = TopBar
+
+local Brand = Instance.new("TextLabel")
+Brand.Size = UDim2.new(0, 160, 1, 0)
+Brand.Position = UDim2.new(0, 16, 0, 0)
+Brand.BackgroundTransparency = 1
+Brand.Text = "AZNOCHEATS"
+Brand.TextColor3 = Color3.fromRGB(225, 29, 46)
+Brand.Font = Enum.Font.GothamBold
+Brand.TextSize = 14
+Brand.TextXAlignment = Enum.TextXAlignment.Left
+Brand.Parent = TopBar
+
+local HomeLbl = Instance.new("TextLabel")
+HomeLbl.Size = UDim2.new(0, 80, 1, 0)
+HomeLbl.Position = UDim2.new(0, 150, 0, 0)
+HomeLbl.BackgroundTransparency = 1
+HomeLbl.Text = "Home"
+HomeLbl.TextColor3 = Color3.fromRGB(220, 220, 230)
+HomeLbl.Font = Enum.Font.GothamMedium
+HomeLbl.TextSize = 13
+HomeLbl.TextXAlignment = Enum.TextXAlignment.Left
+HomeLbl.Parent = TopBar
+
+local Welcome = Instance.new("TextLabel")
+Welcome.Size = UDim2.new(1, -24, 0, 18)
+Welcome.Position = UDim2.new(0, 16, 0, 54)
+Welcome.BackgroundTransparency = 1
+Welcome.Text = "Welcome back. Enter your key to continue."
+Welcome.TextColor3 = Color3.fromRGB(130, 135, 155)
+Welcome.Font = Enum.Font.Gotham
+Welcome.TextSize = 11
+Welcome.TextXAlignment = Enum.TextXAlignment.Left
+Welcome.Parent = Card
+
+-- Status cards row
+local StatusRow = Instance.new("Frame")
+StatusRow.Size = UDim2.new(1, -32, 0, 52)
+StatusRow.Position = UDim2.new(0, 16, 0, 78)
+StatusRow.BackgroundTransparency = 1
+StatusRow.Parent = Card
+
+local function statusCard(x, iconText, title, value, valueColor)
+    local f = Instance.new("Frame")
+    f.Size = UDim2.new(0.48, 0, 1, 0)
+    f.Position = UDim2.new(x, 0, 0, 0)
+    f.BackgroundColor3 = Color3.fromRGB(30, 32, 42)
+    f.BorderSizePixel = 0
+    f.Parent = StatusRow
+    Instance.new("UICorner", f).CornerRadius = UDim.new(0, 10)
+
+    local icon = Instance.new("Frame")
+    icon.Size = UDim2.new(0, 32, 0, 32)
+    icon.Position = UDim2.new(0, 10, 0.5, -16)
+    icon.BackgroundColor3 = Color3.fromRGB(225, 29, 46)
+    icon.BorderSizePixel = 0
+    icon.Parent = f
+    Instance.new("UICorner", icon).CornerRadius = UDim.new(0, 8)
+    local iconL = Instance.new("TextLabel")
+    iconL.Size = UDim2.new(1, 0, 1, 0)
+    iconL.BackgroundTransparency = 1
+    iconL.Text = iconText
+    iconL.TextColor3 = Color3.fromRGB(255, 255, 255)
+    iconL.Font = Enum.Font.GothamBold
+    iconL.TextSize = 12
+    iconL.Parent = icon
+
+    local t = Instance.new("TextLabel")
+    t.Size = UDim2.new(1, -52, 0, 14)
+    t.Position = UDim2.new(0, 48, 0, 10)
+    t.BackgroundTransparency = 1
+    t.Text = title
+    t.TextColor3 = Color3.fromRGB(120, 125, 145)
+    t.Font = Enum.Font.Gotham
+    t.TextSize = 10
+    t.TextXAlignment = Enum.TextXAlignment.Left
+    t.Parent = f
+
+    local v = Instance.new("TextLabel")
+    v.Name = "Value"
+    v.Size = UDim2.new(1, -52, 0, 16)
+    v.Position = UDim2.new(0, 48, 0, 26)
+    v.BackgroundTransparency = 1
+    v.Text = value
+    v.TextColor3 = valueColor
+    v.Font = Enum.Font.GothamBold
+    v.TextSize = 12
+    v.TextXAlignment = Enum.TextXAlignment.Left
+    v.Parent = f
+    return f
+end
+
+local LicCard = statusCard(0, "KEY", "LICENSE", "Not validated", Color3.fromRGB(255, 100, 110))
+local RobloxCard = statusCard(0.52, "R", "ROBLOX", "Found", Color3.fromRGB(80, 220, 140))
+
+-- Activation section
+local ActLabel = Instance.new("TextLabel")
+ActLabel.Size = UDim2.new(1, -32, 0, 16)
+ActLabel.Position = UDim2.new(0, 16, 0, 140)
+ActLabel.BackgroundTransparency = 1
+ActLabel.Text = "  ACTIVATION"
+ActLabel.TextColor3 = Color3.fromRGB(225, 29, 46)
+ActLabel.Font = Enum.Font.GothamBold
+ActLabel.TextSize = 10
+ActLabel.TextXAlignment = Enum.TextXAlignment.Left
+ActLabel.Parent = Card
+
+-- Steps
+local Steps = Instance.new("Frame")
+Steps.Size = UDim2.new(1, -32, 0, 20)
+Steps.Position = UDim2.new(0, 16, 0, 158)
+Steps.BackgroundTransparency = 1
+Steps.Parent = Card
+
+local function step(x, text, active)
+    local s = Instance.new("TextLabel")
+    s.Size = UDim2.new(0.3, 0, 1, 0)
+    s.Position = UDim2.new(x, 0, 0, 0)
+    s.BackgroundTransparency = 1
+    s.Text = (active and "● " or "○ ") .. text
+    s.TextColor3 = active and Color3.fromRGB(100, 180, 255) or Color3.fromRGB(100, 105, 125)
+    s.Font = Enum.Font.GothamMedium
+    s.TextSize = 11
+    s.TextXAlignment = Enum.TextXAlignment.Left
+    s.Parent = Steps
+end
+step(0, "License", true)
+step(0.33, "Roblox", true)
+step(0.66, "Attach", false)
+
+-- Key input
+local KeyBox = Instance.new("TextBox")
+KeyBox.Size = UDim2.new(1, -32, 0, 36)
+KeyBox.Position = UDim2.new(0, 16, 0, 184)
+KeyBox.BackgroundColor3 = Color3.fromRGB(16, 18, 26)
+KeyBox.TextColor3 = Color3.fromRGB(230, 230, 240)
+KeyBox.PlaceholderText = "Paste your Auth Key..."
+KeyBox.PlaceholderColor3 = Color3.fromRGB(90, 95, 115)
+KeyBox.Font = Enum.Font.Gotham
+KeyBox.TextSize = 13
+KeyBox.ClearTextOnFocus = false
+KeyBox.Text = ""
+KeyBox.Parent = Card
+Instance.new("UICorner", KeyBox).CornerRadius = UDim.new(0, 8)
+local KeyStroke = Instance.new("UIStroke")
+KeyStroke.Color = Color3.fromRGB(225, 29, 46)
+KeyStroke.Thickness = 1
+KeyStroke.Transparency = 0.5
+KeyStroke.Parent = KeyBox
+
+KeyBox.Focused:Connect(function()
+    tween(KeyStroke, {Transparency = 0, Color = Color3.fromRGB(225, 29, 46)}, 0.15)
 end)
-tween(AuthBg, {BackgroundTransparency = 0}, 0.35)
-tween(AuthStroke, {Transparency = 0.5}, 0.4)
+KeyBox.FocusLost:Connect(function()
+    tween(KeyStroke, {Transparency = 0.5}, 0.15)
+end)
 
-local AuthTitle = Instance.new("TextLabel")
-AuthTitle.Size = UDim2.new(1, 0, 0, 36)
-AuthTitle.BackgroundColor3 = Color3.fromRGB(24, 24, 32)
-AuthTitle.Text = "  AZNOCHEATS"
-AuthTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-AuthTitle.Font = Enum.Font.GothamBold
-AuthTitle.TextSize = 13
-AuthTitle.TextXAlignment = Enum.TextXAlignment.Left
-AuthTitle.TextTransparency = 1
-AuthTitle.Parent = AuthBg
-Instance.new("UICorner", AuthTitle).CornerRadius = UDim.new(0, 10)
-tween(AuthTitle, {TextTransparency = 0}, 0.4)
+-- Remember checkbox (visual only)
+local Remember = Instance.new("TextLabel")
+Remember.Size = UDim2.new(1, -32, 0, 16)
+Remember.Position = UDim2.new(0, 16, 0, 226)
+Remember.BackgroundTransparency = 1
+Remember.Text = "☑  Remember this key on this PC"
+Remember.TextColor3 = Color3.fromRGB(140, 145, 165)
+Remember.Font = Enum.Font.Gotham
+Remember.TextSize = 11
+Remember.TextXAlignment = Enum.TextXAlignment.Left
+Remember.Parent = Card
 
-local AuthBox = Instance.new("TextBox")
-AuthBox.Size = UDim2.new(1, -28, 0, 34)
-AuthBox.Position = UDim2.new(0, 14, 0, 52)
-AuthBox.BackgroundColor3 = Color3.fromRGB(28, 28, 36)
-AuthBox.TextColor3 = Color3.fromRGB(230, 230, 235)
-AuthBox.PlaceholderText = "Enter Auth Key..."
-AuthBox.PlaceholderColor3 = Color3.fromRGB(100, 100, 115)
-AuthBox.Font = Enum.Font.Gotham
-AuthBox.TextSize = 13
-AuthBox.ClearTextOnFocus = false
-AuthBox.BackgroundTransparency = 1
-AuthBox.TextTransparency = 1
-AuthBox.Parent = AuthBg
-Instance.new("UICorner", AuthBox).CornerRadius = UDim.new(0, 6)
-task.delay(0.1, function() tween(AuthBox, {BackgroundTransparency = 0, TextTransparency = 0}, 0.3) end)
+-- Validate button
+local ValBtn = Instance.new("TextButton")
+ValBtn.Size = UDim2.new(1, -32, 0, 38)
+ValBtn.Position = UDim2.new(0, 16, 0, 248)
+ValBtn.BackgroundColor3 = Color3.fromRGB(225, 29, 46)
+ValBtn.Text = "Validate key  →"
+ValBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ValBtn.Font = Enum.Font.GothamBold
+ValBtn.TextSize = 13
+ValBtn.Parent = Card
+Instance.new("UICorner", ValBtn).CornerRadius = UDim.new(0, 8)
 
-local AuthStatus = Instance.new("TextLabel")
-AuthStatus.Size = UDim2.new(1, -28, 0, 18)
-AuthStatus.Position = UDim2.new(0, 14, 0, 92)
-AuthStatus.BackgroundTransparency = 1
-AuthStatus.Text = ""
-AuthStatus.TextColor3 = Color3.fromRGB(225, 29, 46)
-AuthStatus.Font = Enum.Font.Gotham
-AuthStatus.TextSize = 11
-AuthStatus.TextXAlignment = Enum.TextXAlignment.Left
-AuthStatus.Parent = AuthBg
+ValBtn.MouseEnter:Connect(function()
+    tween(ValBtn, {BackgroundColor3 = Color3.fromRGB(255, 45, 65)}, 0.12)
+end)
+ValBtn.MouseLeave:Connect(function()
+    tween(ValBtn, {BackgroundColor3 = Color3.fromRGB(225, 29, 46)}, 0.12)
+end)
 
-local AuthBtn = Instance.new("TextButton")
-AuthBtn.Size = UDim2.new(1, -28, 0, 32)
-AuthBtn.Position = UDim2.new(0, 14, 0, 114)
-AuthBtn.BackgroundColor3 = Color3.fromRGB(225, 29, 46)
-AuthBtn.Text = "Unlock"
-AuthBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-AuthBtn.Font = Enum.Font.GothamBold
-AuthBtn.TextSize = 13
-AuthBtn.BackgroundTransparency = 1
-AuthBtn.TextTransparency = 1
-AuthBtn.Parent = AuthBg
-Instance.new("UICorner", AuthBtn).CornerRadius = UDim.new(0, 6)
-task.delay(0.15, function() tween(AuthBtn, {BackgroundTransparency = 0, TextTransparency = 0}, 0.3) end)
-AuthBtn.MouseEnter:Connect(function() tween(AuthBtn, {BackgroundColor3 = Color3.fromRGB(255, 42, 61)}, 0.12) end)
-AuthBtn.MouseLeave:Connect(function() tween(AuthBtn, {BackgroundColor3 = Color3.fromRGB(225, 29, 46)}, 0.12) end)
+local ErrLbl = Instance.new("TextLabel")
+ErrLbl.Size = UDim2.new(1, -32, 0, 14)
+ErrLbl.Position = UDim2.new(0, 16, 1, -18)
+ErrLbl.BackgroundTransparency = 1
+ErrLbl.Text = ""
+ErrLbl.TextColor3 = Color3.fromRGB(255, 90, 100)
+ErrLbl.Font = Enum.Font.Gotham
+ErrLbl.TextSize = 10
+ErrLbl.TextXAlignment = Enum.TextXAlignment.Left
+ErrLbl.Parent = Card
 
+-- ===================== MAIN MENU ===================== --
 local function openMenu()
-    tween(AuthBg, {BackgroundTransparency = 1}, 0.25)
-    tween(AuthStroke, {Transparency = 1}, 0.25)
-    task.wait(0.28)
+    -- success state on cards
+    local licVal = LicCard:FindFirstChild("Value")
+    if licVal then
+        licVal.Text = "Validated"
+        licVal.TextColor3 = Color3.fromRGB(80, 220, 140)
+    end
+    tween(KeyStroke, {Color = Color3.fromRGB(80, 220, 140), Transparency = 0}, 0.2)
+    ValBtn.Text = "Validated ✓"
+    tween(ValBtn, {BackgroundColor3 = Color3.fromRGB(40, 160, 80)}, 0.2)
+    task.wait(0.55)
+
+    tween(Card, {BackgroundTransparency = 1}, 0.25)
+    tween(Overlay, {BackgroundTransparency = 1}, 0.3)
+    task.wait(0.3)
     AuthGui:Destroy()
 
     LocalPlayer.Idled:Connect(function()
@@ -350,42 +522,15 @@ local function openMenu()
         end)
     end
 
-    -- UI
+    -- Main panel (opens immediately)
     local Gui = Instance.new("ScreenGui")
     Gui.Name = "AznoCheats"
     Gui.ResetOnSpawn = false
     Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     Gui.Parent = game:GetService("CoreGui")
 
-    -- Toast: Press INSERT
-    local Toast = Instance.new("Frame")
-    Toast.Size = UDim2.new(0, 280, 0, 40)
-    Toast.Position = UDim2.new(0.5, -140, 0, -50)
-    Toast.BackgroundColor3 = Color3.fromRGB(18, 18, 24)
-    Toast.BorderSizePixel = 0
-    Toast.Parent = Gui
-    Instance.new("UICorner", Toast).CornerRadius = UDim.new(0, 8)
-    local ToastStroke = Instance.new("UIStroke")
-    ToastStroke.Color = Color3.fromRGB(225, 29, 46)
-    ToastStroke.Thickness = 1
-    ToastStroke.Transparency = 0.4
-    ToastStroke.Parent = Toast
-    local ToastText = Instance.new("TextLabel")
-    ToastText.Size = UDim2.new(1, 0, 1, 0)
-    ToastText.BackgroundTransparency = 1
-    ToastText.Text = "Press INSERT to open AznoCheats"
-    ToastText.TextColor3 = Color3.fromRGB(255, 255, 255)
-    ToastText.Font = Enum.Font.GothamBold
-    ToastText.TextSize = 13
-    ToastText.Parent = Toast
-    tween(Toast, {Position = UDim2.new(0.5, -140, 0, 20)}, 0.4, Enum.EasingStyle.Back)
-    task.delay(3.5, function()
-        tween(Toast, {Position = UDim2.new(0.5, -140, 0, -50)}, 0.3)
-        task.delay(0.35, function() Toast:Destroy() end)
-    end)
-
     local Main = Instance.new("Frame")
-    Main.Size = UDim2.new(0, 560, 0, 380)
+    Main.Size = UDim2.new(0, 0, 0, 0)
     Main.Position = UDim2.new(0.5, 0, 0.5, 0)
     Main.AnchorPoint = Vector2.new(0.5, 0.5)
     Main.BackgroundColor3 = Color3.fromRGB(16, 16, 22)
@@ -393,15 +538,17 @@ local function openMenu()
     Main.Active = true
     Main.Draggable = true
     Main.ClipsDescendants = true
-    Main.Visible = false
     Main.Parent = Gui
     Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 12)
 
     local Stroke = Instance.new("UIStroke")
     Stroke.Color = Color3.fromRGB(225, 29, 46)
     Stroke.Thickness = 1.5
-    Stroke.Transparency = 0.5
+    Stroke.Transparency = 1
     Stroke.Parent = Main
+
+    tween(Main, {Size = UDim2.new(0, 560, 0, 380)}, 0.4, Enum.EasingStyle.Back)
+    tween(Stroke, {Transparency = 0.5}, 0.4)
 
     task.spawn(function()
         while Main.Parent do
@@ -410,9 +557,7 @@ local function openMenu()
                 task.wait(1.1)
                 tween(Stroke, {Transparency = 0.6, Color = Color3.fromRGB(225, 29, 46)}, 1.1)
                 task.wait(1.1)
-            else
-                task.wait(0.5)
-            end
+            else task.wait(0.4) end
         end
     end)
 
@@ -437,15 +582,6 @@ local function openMenu()
     Logo.Font = Enum.Font.GothamBold
     Logo.TextSize = 12
     Logo.Parent = Side
-
-    local Accent = Instance.new("Frame")
-    Accent.Size = UDim2.new(0, 64, 0, 2)
-    Accent.Position = UDim2.new(0.5, 0, 0, 40)
-    Accent.AnchorPoint = Vector2.new(0.5, 0)
-    Accent.BackgroundColor3 = Color3.fromRGB(225, 29, 46)
-    Accent.BorderSizePixel = 0
-    Accent.Parent = Side
-    Instance.new("UICorner", Accent).CornerRadius = UDim.new(1, 0)
 
     local tabs = {"World", "Character", "Aim", "Visuals", "Games"}
     local tabBtns, pages = {}, {}
@@ -507,12 +643,6 @@ local function openMenu()
         b.BorderSizePixel = 0
         b.Parent = Side
         Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
-        b.MouseEnter:Connect(function()
-            if not pages[name].Visible then tween(b, {BackgroundColor3 = Color3.fromRGB(28,28,36)}, 0.1) end
-        end)
-        b.MouseLeave:Connect(function()
-            if not pages[name].Visible then tween(b, {BackgroundColor3 = Color3.fromRGB(12,12,16)}, 0.1) end
-        end)
         b.MouseButton1Click:Connect(function() switchTab(name, i) end)
         tabBtns[name] = b
     end
@@ -565,8 +695,6 @@ local function openMenu()
         knob.BorderSizePixel = 0
         knob.Parent = sw
         Instance.new("UICorner", knob).CornerRadius = UDim.new(1, 0)
-        row.MouseEnter:Connect(function() tween(row, {BackgroundColor3 = Color3.fromRGB(30, 30, 42)}, 0.12) end)
-        row.MouseLeave:Connect(function() tween(row, {BackgroundColor3 = Color3.fromRGB(22, 22, 30)}, 0.12) end)
         sw.MouseButton1Click:Connect(function()
             cfg[key] = not cfg[key]
             tween(sw, {BackgroundColor3 = cfg[key] and Color3.fromRGB(225,29,46) or Color3.fromRGB(50,50,62)}, 0.15)
@@ -603,8 +731,6 @@ local function openMenu()
             b.TextSize = 14
             b.Parent = row
             Instance.new("UICorner", b).CornerRadius = UDim.new(0, 4)
-            b.MouseEnter:Connect(function() tween(b, {BackgroundColor3 = Color3.fromRGB(225,29,46)}, 0.1) end)
-            b.MouseLeave:Connect(function() tween(b, {BackgroundColor3 = Color3.fromRGB(40,40,52)}, 0.1) end)
             b.MouseButton1Click:Connect(function()
                 cfg[key] = math.clamp(cfg[key] + d, minV, maxV)
                 lbl.Text = label .. ": " .. tostring(cfg[key])
@@ -661,8 +787,7 @@ local function openMenu()
     toggle(pages["Games"], C.LT2, "Auto Sell", "AutoSell")
     toggle(pages["Games"], C.LT2, "Tree ESP", "ESP")
 
-    -- INSERT to open / close panel
-    local menuOpen = false
+    local menuOpen = true
     UserInputService.InputBegan:Connect(function(input, gpe)
         if gpe then return end
         if input.KeyCode == Enum.KeyCode.Insert then
@@ -680,25 +805,27 @@ local function openMenu()
         end
     end)
 
-    print("[AznoCheats] unlocked — press INSERT to open the panel")
+    print("[AznoCheats] panel open — INSERT to toggle")
 end
 
-AuthBtn.MouseButton1Click:Connect(function()
-    if checkKey(AuthBox.Text) then
-        AuthStatus.TextColor3 = Color3.fromRGB(34, 197, 94)
-        AuthStatus.Text = "Key accepted"
-        tween(AuthStroke, {Color = Color3.fromRGB(34,197,94), Transparency = 0.2}, 0.2)
-        task.wait(0.4)
+local function tryValidate()
+    if checkKey(KeyBox.Text) then
+        ErrLbl.Text = ""
         openMenu()
     else
-        AuthStatus.TextColor3 = Color3.fromRGB(225, 29, 46)
-        AuthStatus.Text = "Invalid key"
-        local orig = AuthBg.Position
-        for i=1,4 do
-            AuthBg.Position = orig + UDim2.new(0, (i%2==0 and 6 or -6), 0, 0)
-            task.wait(0.04)
+        ErrLbl.Text = "No active key / invalid license"
+        tween(KeyStroke, {Color = Color3.fromRGB(255, 80, 90), Transparency = 0}, 0.1)
+        local orig = Card.Position
+        for i = 1, 4 do
+            Card.Position = orig + UDim2.new(0, (i % 2 == 0 and 5 or -5), 0, 0)
+            task.wait(0.035)
         end
-        AuthBg.Position = orig
+        Card.Position = orig
+        task.delay(0.6, function()
+            tween(KeyStroke, {Color = Color3.fromRGB(225, 29, 46), Transparency = 0.5}, 0.25)
+        end)
     end
-end)
-AuthBox.FocusLost:Connect(function(e) if e then AuthBtn.MouseButton1Click:Fire() end end)
+end
+
+ValBtn.MouseButton1Click:Connect(tryValidate)
+KeyBox.FocusLost:Connect(function(enter) if enter then tryValidate() end end)
