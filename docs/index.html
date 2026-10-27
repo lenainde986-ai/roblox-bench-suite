@@ -10,20 +10,15 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;overflow-x:hidden}
-
-/* Background */
 .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(225,29,46,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(225,29,46,.035) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 20%,transparent 75%);animation:gridDrift 28s linear infinite}
 @keyframes gridDrift{0%{background-position:0 0}100%{background-position:48px 48px}}
 .orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;opacity:.45;animation:orbFloat 12s ease-in-out infinite}
-.orb-1{width:420px;height:420px;background:rgba(225,29,46,.22);top:-120px;left:50%;transform:translateX(-50%);animation-delay:0s}
+.orb-1{width:420px;height:420px;background:rgba(225,29,46,.22);top:-120px;left:50%;transform:translateX(-50%)}
 .orb-2{width:280px;height:280px;background:rgba(225,29,46,.12);bottom:10%;right:-60px;animation-delay:-4s}
 @keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(20px,-30px) scale(1.08)}}
-
-/* Motion helpers */
 .fade-up{opacity:0;transform:translateY(22px);transition:opacity .55s ease,transform .55s ease}
 .fade-up.show{opacity:1;transform:translateY(0)}
 .delay-1{transition-delay:.08s}.delay-2{transition-delay:.16s}.delay-3{transition-delay:.24s}.delay-4{transition-delay:.32s}
-
 header{position:sticky;top:0;z-index:100;background:rgba(7,7,9,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);animation:headerIn .5s ease}
 @keyframes headerIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
 .nav-top{max-width:1200px;margin:0 auto;padding:.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
@@ -35,11 +30,10 @@ header{position:sticky;top:0;z-index:100;background:rgba(7,7,9,.85);backdrop-fil
 .nav-links a{color:var(--muted);text-decoration:none;font-size:.875rem;font-weight:500;transition:color .15s}
 .nav-links a:hover{color:var(--text)}
 .btn-red{background:var(--red);color:#fff;border:none;padding:.5rem 1.1rem;border-radius:8px;font-weight:600;font-size:.875rem;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;transition:background .15s,box-shadow .2s,transform .15s}
-.btn-red::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.25) 50%,transparent 60%);transform:translateX(-120%);transition:none}
+.btn-red::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.25) 50%,transparent 60%);transform:translateX(-120%)}
 .btn-red:hover{background:var(--red-bright);box-shadow:0 0 24px var(--red-glow);transform:translateY(-1px)}
 .btn-red:hover::after{animation:shine .7s ease}
 @keyframes shine{to{transform:translateX(120%)}}
-
 .hero{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:4.5rem 1.5rem 2.5rem;text-align:center}
 .hero-title{font-size:clamp(2.8rem,7vw,5rem);font-weight:800;letter-spacing:-.03em;line-height:1;background:linear-gradient(180deg,#fff 30%,var(--red-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 40px var(--red-glow));margin-bottom:.2rem;animation:titleGlow 3s ease-in-out infinite}
 @keyframes titleGlow{0%,100%{filter:drop-shadow(0 0 28px var(--red-glow))}50%{filter:drop-shadow(0 0 52px rgba(255,42,61,.55))}}
@@ -48,20 +42,22 @@ header{position:sticky;top:0;z-index:100;background:rgba(7,7,9,.85);backdrop-fil
 .stats-bar:hover{border-color:rgba(225,29,46,.35);box-shadow:0 0 20px rgba(225,29,46,.1)}
 .stats-bar strong{color:var(--text)}
 .stats-bar .sep{color:var(--border)}
-
 .section{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
 .section-label{font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:.35rem}
 .section-title{font-size:1.6rem;font-weight:700;margin-bottom:.4rem}
-.section-desc{color:var(--muted);font-size:.92rem;margin-bottom:1.5rem;max-width:520px}
-
-.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:1rem}
+.section-desc{color:var(--muted);font-size:.92rem;margin-bottom:1.5rem;max-width:560px}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin-bottom:1rem}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .2s,box-shadow .25s,transform .25s}
 .card:hover{border-color:rgba(225,29,46,.45);box-shadow:0 12px 40px rgba(225,29,46,.12);transform:translateY(-4px)}
 .card-top{height:100px;background:linear-gradient(135deg,#1a0a0c,#0e0e12);display:flex;align-items:flex-end;padding:1rem;position:relative;overflow:hidden}
 .card-top::before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 0deg,transparent,rgba(225,29,46,.2),transparent 40%);animation:spinSlow 8s linear infinite;opacity:.6}
-.card-top.arc::before{background:conic-gradient(from 0deg,transparent,rgba(80,140,200,.2),transparent 40%)}
-@keyframes spinSlow{to{transform:rotate(360deg)}}
 .card-top.arc{background:linear-gradient(135deg,#0a1218,#0e0e12)}
+.card-top.arc::before{background:conic-gradient(from 0deg,transparent,rgba(80,140,200,.22),transparent 40%)}
+.card-top.fn{background:linear-gradient(135deg,#0a1020,#0e0e12)}
+.card-top.fn::before{background:conic-gradient(from 0deg,transparent,rgba(56,120,255,.22),transparent 40%)}
+.card-top.eft{background:linear-gradient(135deg,#14100a,#0e0e12)}
+.card-top.eft::before{background:conic-gradient(from 0deg,transparent,rgba(200,150,60,.2),transparent 40%)}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
 .card-badge{position:absolute;top:.75rem;right:.75rem;font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.25rem .55rem;border-radius:999px;z-index:1}
 .badge-live{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3);animation:badgePulse 2s ease-in-out infinite}
 @keyframes badgePulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.25)}50%{box-shadow:0 0 0 6px rgba(34,197,94,0)}}
@@ -71,15 +67,13 @@ header{position:sticky;top:0;z-index:100;background:rgba(7,7,9,.85);backdrop-fil
 .card-game{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem}
 .card-desc{font-size:.85rem;color:var(--muted);margin-bottom:.9rem;line-height:1.45}
 .card-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1rem}
-.tag{font-size:.68rem;font-weight:600;padding:.2rem .5rem;border-radius:6px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);transition:border-color .15s,color .15s}
-.card:hover .tag{border-color:rgba(225,29,46,.25)}
+.tag{font-size:.68rem;font-weight:600;padding:.2rem .5rem;border-radius:6px;background:var(--surface2);border:1px solid var(--border);color:var(--muted)}
 .card-actions{display:flex;gap:.5rem}
 .btn-outline{flex:1;text-align:center;padding:.45rem .8rem;border-radius:8px;font-size:.8rem;font-weight:600;text-decoration:none;border:1px solid var(--border);color:var(--muted);transition:border-color .15s,color .15s,transform .15s}
 .btn-outline:hover{border-color:var(--red);color:var(--text);transform:translateY(-1px)}
 .btn-solid{flex:1;text-align:center;padding:.45rem .8rem;border-radius:8px;font-size:.8rem;font-weight:600;text-decoration:none;background:var(--red);color:#fff;border:none;transition:background .15s,box-shadow .2s,transform .15s}
 .btn-solid:hover{background:var(--red-bright);box-shadow:0 0 18px var(--red-glow);transform:translateY(-1px)}
 .btn-disabled{flex:1;text-align:center;padding:.45rem .8rem;border-radius:8px;font-size:.8rem;font-weight:600;background:var(--surface2);color:var(--muted);border:1px solid var(--border);cursor:not-allowed}
-
 .menu-preview{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;max-width:620px;transition:box-shadow .3s,border-color .3s}
 .menu-preview:hover{border-color:rgba(225,29,46,.35);box-shadow:0 0 40px rgba(225,29,46,.1)}
 .menu-bar{padding:.5rem 1rem;background:var(--surface2);border-bottom:1px solid var(--border);font-size:.7rem;font-family:'JetBrains Mono',monospace;color:var(--muted);display:flex;justify-content:space-between}
@@ -112,21 +106,15 @@ header{position:sticky;top:0;z-index:100;background:rgba(7,7,9,.85);backdrop-fil
 .speed-btns button:hover{background:var(--red)}
 .page{display:none}.page.active{display:block;animation:pageIn .25s ease}
 @keyframes pageIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
-
 footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:1.75rem;text-align:center;color:var(--muted);font-size:.78rem}
-footer a{color:var(--red-bright);text-decoration:none;transition:opacity .15s}
-footer a:hover{opacity:.8}
-
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-}
+footer a{color:var(--red-bright);text-decoration:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
 <div class="grid-bg"></div>
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
-
 <header>
   <div class="nav-top">
     <div class="logo"><div class="logo-icon">A</div> AZNO<span>CHEATS</span></div>
@@ -137,25 +125,22 @@ footer a:hover{opacity:.8}
     </div>
   </div>
 </header>
-
 <section class="hero">
   <h1 class="hero-title fade-up">AZNOCHEATS</h1>
   <p class="hero-sub fade-up delay-1">Private Suite</p>
   <div class="stats-bar fade-up delay-2">
-    <span><strong>2</strong> Products</span>
+    <span><strong>4</strong> Products</span>
     <span class="sep">|</span>
-    <span><strong>Roblox</strong> + Arc Raiders</span>
+    <span><strong>Roblox</strong> · Arc · FN · EFT</span>
     <span class="sep">|</span>
     <span><strong>AuthKey</strong></span>
   </div>
 </section>
-
 <section class="section" id="products">
   <div class="section-label fade-up">Catalog</div>
   <h2 class="section-title fade-up delay-1">Products</h2>
-  <p class="section-desc fade-up delay-2">Pick a category. Roblox suite is live. Arc Raiders is listed for the site structure only.</p>
+  <p class="section-desc fade-up delay-2">Roblox suite is live. Other titles are catalog placeholders only — no software, no download.</p>
   <div class="products">
-
     <article class="card fade-up delay-2">
       <div class="card-top">
         <span class="card-badge badge-live">Live</span>
@@ -164,19 +149,13 @@ footer a:hover{opacity:.8}
       <div class="card-body">
         <div class="card-game">Roblox</div>
         <p class="card-desc">Multi-tab loader with AuthKey, World / Character / Aim / Visuals / Games (BSS + LT2).</p>
-        <div class="card-tags">
-          <span class="tag">AuthKey</span>
-          <span class="tag">ESP</span>
-          <span class="tag">Farm</span>
-          <span class="tag">INSERT</span>
-        </div>
+        <div class="card-tags"><span class="tag">AuthKey</span><span class="tag">ESP</span><span class="tag">Farm</span><span class="tag">INSERT</span></div>
         <div class="card-actions">
           <a class="btn-outline" href="#previews">Preview</a>
           <a class="btn-solid" href="https://github.com/lenainde986-ai/roblox-bench-suite" target="_blank">Repo</a>
         </div>
       </div>
     </article>
-
     <article class="card fade-up delay-3">
       <div class="card-top arc">
         <span class="card-badge badge-soon">Coming soon</span>
@@ -184,24 +163,41 @@ footer a:hover{opacity:.8}
       </div>
       <div class="card-body">
         <div class="card-game">Arc Raiders</div>
-        <p class="card-desc">Category placeholder on the site. No software, no download, no bypass — listing only.</p>
-        <div class="card-tags">
-          <span class="tag">Catalog</span>
-          <span class="tag">Placeholder</span>
-        </div>
-        <div class="card-actions">
-          <span class="btn-disabled">Unavailable</span>
-        </div>
+        <p class="card-desc">Catalog placeholder. No software, no download, no bypass.</p>
+        <div class="card-tags"><span class="tag">Catalog</span><span class="tag">Placeholder</span></div>
+        <div class="card-actions"><span class="btn-disabled">Unavailable</span></div>
       </div>
     </article>
-
+    <article class="card fade-up delay-3">
+      <div class="card-top fn">
+        <span class="card-badge badge-soon">Coming soon</span>
+        <div class="card-title">AznoFN</div>
+      </div>
+      <div class="card-body">
+        <div class="card-game">Fortnite</div>
+        <p class="card-desc">Catalog placeholder. No software, no download, no bypass.</p>
+        <div class="card-tags"><span class="tag">Catalog</span><span class="tag">Placeholder</span></div>
+        <div class="card-actions"><span class="btn-disabled">Unavailable</span></div>
+      </div>
+    </article>
+    <article class="card fade-up delay-4">
+      <div class="card-top eft">
+        <span class="card-badge badge-soon">Coming soon</span>
+        <div class="card-title">AznoTarkov</div>
+      </div>
+      <div class="card-body">
+        <div class="card-game">Escape from Tarkov</div>
+        <p class="card-desc">Catalog placeholder. No software, no download, no bypass.</p>
+        <div class="card-tags"><span class="tag">Catalog</span><span class="tag">Placeholder</span></div>
+        <div class="card-actions"><span class="btn-disabled">Unavailable</span></div>
+      </div>
+    </article>
   </div>
 </section>
-
 <section class="section" id="previews">
   <div class="section-label fade-up">Interactive</div>
   <h2 class="section-title fade-up delay-1">Live Menu Preview</h2>
-  <p class="section-desc fade-up delay-2">Roblox AznoCheats only. Click the sidebar tabs. Every toggle works in the demo.</p>
+  <p class="section-desc fade-up delay-2">Roblox AznoCheats only. Click the sidebar tabs.</p>
   <div class="menu-preview fade-up delay-3">
     <div class="menu-bar"><span>AznoCheats · Roblox</span><span class="live">● LIVE</span></div>
     <div class="menu-stage">
@@ -225,99 +221,15 @@ footer a:hover{opacity:.8}
     </div>
   </div>
 </section>
-
 <footer>AznoCheats · Catalog · <a href="https://github.com/lenainde986-ai/roblox-bench-suite" target="_blank">GitHub</a></footer>
-
 <script>
-const pages = {
-  world: [
-    ['sec','ENVIRONMENT'],
-    ['t','Fullbright'],['t','No Fog'],['t','X-Ray (translucent)'],['t','Low Gravity']
-  ],
-  character: [
-    ['sec','MOVEMENT'],
-    ['t','Fly'],['t','Infinite Jump'],['t','Noclip'],
-    ['n','Speed',16],
-    ['sec','PROTECTION'],
-    ['t','God Mode'],['t','Inf Stamina']
-  ],
-  aim: [
-    ['sec','AIMBOT'],
-    ['t','Aimbot'],['t','Silent Aim'],['t','Triggerbot'],
-    ['t','Team Check',true],['t','Visible Check',true],
-    ['n','FOV',120],['n','Smooth',5]
-  ],
-  visuals: [
-    ['sec','PLAYER ESP'],
-    ['t','Enable ESP'],['t','Box ESP'],['t','Name ESP'],
-    ['t','Distance ESP'],['t','Tracers'],['t','Chams']
-  ],
-  games: [
-    ['sec','BEE SWARM SIMULATOR'],
-    ['t','Load BSS'],['t','Auto Farm'],['t','Auto Dig'],['t','Auto Convert'],
-    ['t','Collect Tokens',true],['t','Kill Bugs',true],['t','BSS ESP',true],
-    ['sec','LUMBER TYCOON 2'],
-    ['t','Load LT2'],['t','Auto Chop'],['t','Auto Sell'],['t','Tree ESP',true]
-  ]
-};
-
-function buildPage(id, items) {
-  const el = document.getElementById('page-' + id);
-  items.forEach(it => {
-    if (it[0] === 'sec') {
-      const d = document.createElement('div');
-      d.className = 'sec'; d.textContent = it[1];
-      el.appendChild(d);
-    } else if (it[0] === 't') {
-      const row = document.createElement('div');
-      row.className = 'row';
-      const span = document.createElement('span');
-      span.textContent = it[1];
-      const sw = document.createElement('div');
-      sw.className = 'sw' + (it[2] ? ' on' : '');
-      sw.innerHTML = '<i></i>';
-      sw.onclick = () => sw.classList.toggle('on');
-      row.appendChild(span); row.appendChild(sw);
-      el.appendChild(row);
-    } else if (it[0] === 'n') {
-      const row = document.createElement('div');
-      row.className = 'speed-row';
-      let v = it[2];
-      const span = document.createElement('span');
-      span.textContent = it[1] + ': ' + v;
-      const btns = document.createElement('div');
-      btns.className = 'speed-btns';
-      const m = document.createElement('button'); m.textContent = '-';
-      const p = document.createElement('button'); p.textContent = '+';
-      m.onclick = () => { v = Math.max(1, v-5); span.textContent = it[1]+': '+v; };
-      p.onclick = () => { v = Math.min(300, v+5); span.textContent = it[1]+': '+v; };
-      btns.appendChild(m); btns.appendChild(p);
-      row.appendChild(span); row.appendChild(btns);
-      el.appendChild(row);
-    }
-  });
-}
-
-Object.keys(pages).forEach(k => buildPage(k, pages[k]));
-
-document.querySelectorAll('.side-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.side-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('page-' + tab.dataset.tab).classList.add('active');
-  });
-});
-
-// Scroll reveal
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
-}, { threshold: 0.12 });
-document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
-// Hero is above fold — show immediately
-requestAnimationFrame(() => {
-  document.querySelectorAll('.hero .fade-up').forEach(el => el.classList.add('show'));
-});
+const pages={world:[['sec','ENVIRONMENT'],['t','Fullbright'],['t','No Fog'],['t','X-Ray (translucent)'],['t','Low Gravity']],character:[['sec','MOVEMENT'],['t','Fly'],['t','Infinite Jump'],['t','Noclip'],['n','Speed',16],['sec','PROTECTION'],['t','God Mode'],['t','Inf Stamina']],aim:[['sec','AIMBOT'],['t','Aimbot'],['t','Silent Aim'],['t','Triggerbot'],['t','Team Check',true],['t','Visible Check',true],['n','FOV',120],['n','Smooth',5]],visuals:[['sec','PLAYER ESP'],['t','Enable ESP'],['t','Box ESP'],['t','Name ESP'],['t','Distance ESP'],['t','Tracers'],['t','Chams']],games:[['sec','BEE SWARM SIMULATOR'],['t','Load BSS'],['t','Auto Farm'],['t','Auto Dig'],['t','Auto Convert'],['t','Collect Tokens',true],['t','Kill Bugs',true],['t','BSS ESP',true],['sec','LUMBER TYCOON 2'],['t','Load LT2'],['t','Auto Chop'],['t','Auto Sell'],['t','Tree ESP',true]]};
+function buildPage(id,items){const el=document.getElementById('page-'+id);items.forEach(it=>{if(it[0]==='sec'){const d=document.createElement('div');d.className='sec';d.textContent=it[1];el.appendChild(d)}else if(it[0]==='t'){const row=document.createElement('div');row.className='row';const span=document.createElement('span');span.textContent=it[1];const sw=document.createElement('div');sw.className='sw'+(it[2]?' on':'');sw.innerHTML='<i></i>';sw.onclick=()=>sw.classList.toggle('on');row.appendChild(span);row.appendChild(sw);el.appendChild(row)}else if(it[0]==='n'){const row=document.createElement('div');row.className='speed-row';let v=it[2];const span=document.createElement('span');span.textContent=it[1]+': '+v;const btns=document.createElement('div');btns.className='speed-btns';const m=document.createElement('button');m.textContent='-';const p=document.createElement('button');p.textContent='+';m.onclick=()=>{v=Math.max(1,v-5);span.textContent=it[1]+': '+v};p.onclick=()=>{v=Math.min(300,v+5);span.textContent=it[1]+': '+v};btns.appendChild(m);btns.appendChild(p);row.appendChild(span);row.appendChild(btns);el.appendChild(row)}})}
+Object.keys(pages).forEach(k=>buildPage(k,pages[k]));
+document.querySelectorAll('.side-tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.side-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));tab.classList.add('active');document.getElementById('page-'+tab.dataset.tab).classList.add('active')})});
+const io=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')})},{threshold:0.12});
+document.querySelectorAll('.fade-up').forEach(el=>io.observe(el));
+requestAnimationFrame(()=>{document.querySelectorAll('.hero .fade-up').forEach(el=>el.classList.add('show'))});
 </script>
 </body>
 </html>
