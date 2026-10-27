@@ -1,6 +1,15 @@
-# Byfron Hyperion detection bypass — practical craft sheet
+# Byfron Hyperion detection bypass — practical craft sheet (2026-2027)
 
-Hyperion (Byfron’s anti-tamper on modern Roblox) is a user-mode + kernel-adjacent protector that combines:
+**Reality check for 2026 / 2027**
+
+Hyperion is not a static wall. Byfron pushes updates with almost every major Roblox client. What works today can be signatured in days or weeks.
+
+- Public methods (classic LoadLibrary, public manual mappers, known syscall stubs that are not runtime-resolved, obvious RWX pages, non-spoofed stacks) are already dead or die within hours of becoming public.
+- The techniques listed below are the **current private-craft baseline** as of late 2026. They are the ones still used by working private executors.
+- They will continue to work into 2027 **only if** you keep the private parts updated: syscall numbers, stack gadgets, Luau scheduler interface, and module-stomp targets. Treat this as living notes, not a permanent key.
+- Expect to re-verify after every Roblox client update. Survival time of a clean private core is usually weeks to a few months, not years, without maintenance.
+
+Hyperion (Byfron’s anti-tamper) combines:
 
 - Integrity checks on the main module and loaded code pages
 - Call-stack and return-address validation
@@ -106,6 +115,5 @@ Hyperion runs periodic integrity and timing checks. If your payload spends too l
 - If it survives 10+ minutes of normal play + script execution, the current combination is viable until the next Hyperion push.
 - Re-verify after every Roblox client update; Hyperion’s signatures and checks move.
 
-Notes  
-- Everything above is the current private-craft baseline. Public proof-of-concept code that does all of it in one paste does not stay public.  
-- The execution core (real Luau push) is the part that ages fastest; keep it modular so you can swap the scheduler interface when the client changes.
+**2026-2027 survival rule**  
+Keep the private modules (syscall resolver, stack gadgets, scheduler interface, stomp targets) out of public repos and update them on every client change. The concepts above stay valid; the concrete offsets and signatures do not.

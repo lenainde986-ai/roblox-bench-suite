@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roblox Bench Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0d10;
+    --surface: #12151a;
+    --border: #1e242c;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #3fb950;
+    --accent2: #58a6ff;
+    --warning: #d29922;
+    --danger: #f85149;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--accent); }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-size: 0.9rem;
+    transition: color 0.15s;
+  }
+  nav a:hover { color: var(--text); }
+  .hero {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 4rem 2rem 3rem;
+  }
+  .hero h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.75rem;
+  }
+  .hero p {
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 560px;
+  }
+  .badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(63,185,80,0.12);
+    color: var(--accent);
+    border: 1px solid rgba(63,185,80,0.25);
+    margin-bottom: 1.25rem;
+  }
+  .grid {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: border-color 0.15s;
+  }
+  .card:hover { border-color: #30363d; }
+  .card h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card p {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    background: #21262d;
+    color: var(--muted);
+  }
+  .section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 2rem 3rem;
+  }
+  .section h2 {
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.7rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+  }
+  th { color: var(--muted); font-weight: 500; }
+  .status-ok { color: var(--accent); }
+  .status-warn { color: var(--warning); }
+  .status-dead { color: var(--danger); }
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .cta {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.65rem 1.25rem;
+    background: var(--accent);
+    color: #0b0d10;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+  .cta:hover { opacity: 0.9; }
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+    background: #21262d;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">roblox<span>-bench</span></div>
+    <nav>
+      <a href="#plates">Plates</a>
+      <a href="#status">2026-27 Status</a>
+      <a href="#hyperion">Hyperion</a>
+      <a href="https://github.com/lenainde986-ai/roblox-bench-suite" target="_blank">Repo</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="badge">PRIVATE SUITE · 2026</div>
+    <h1>Roblox Bench Suite</h1>
+    <p>Bee Swarm + Lumber Tycoon cheats, modern external executor skeleton, and current Hyperion / Byfron bypass craft notes. Built for private use.</p>
+    <a class="cta" href="https://github.com/lenainde986-ai/roblox-bench-suite" target="_blank">Open Repository</a>
+  </section>
+
+  <section class="grid" id="plates">
+    <div class="card">
+      <h3><span class="tag">LUA</span> Bee Swarm Simulator</h3>
+      <p>Auto farm, dig, convert, token collect, bug kill, ESP, speed, inf jump, noclip. INSERT menu.</p>
+    </div>
+    <div class="card">
+      <h3><span class="tag">LUA</span> Lumber Tycoon 2</h3>
+      <p>Auto chop, auto sell, fly, ESP, speed, inf jump, noclip. INSERT menu.</p>
+    </div>
+    <div class="card">
+      <h3><span class="tag">C++</span> Modern Executor</h3>
+      <p>External ImGui shell + named-pipe payload. Ready for private manual-map + Luau core.</p>
+    </div>
+    <div class="card">
+      <h3><span class="tag">NOTES</span> Hyperion Bypass</h3>
+      <p>Direct syscalls, manual map / module stomp, thread hijack, stack spoof, clean execution path.</p>
+    </div>
+  </section>
+
+  <section class="section" id="status">
+    <h2>Will it work in 2026 and 2027?</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Status</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Bee Swarm / LT2 scripts</td>
+          <td class="status-ok">Working</td>
+          <td>Remote names &amp; paths can drift after game updates. Easy re-spy.</td>
+        </tr>
+        <tr>
+          <td>Executor UI + pipe</td>
+          <td class="status-ok">Working</td>
+          <td>Stable. Injection method must be private.</td>
+        </tr>
+        <tr>
+          <td>Classic LoadLibrary inject</td>
+          <td class="status-dead">Dead</td>
+          <td>Hyperion flags instantly.</td>
+        </tr>
+        <tr>
+          <td>Public manual mappers</td>
+          <td class="status-dead">Dead / short life</td>
+          <td>Signatures appear fast.</td>
+        </tr>
+        <tr>
+          <td>Private direct-syscall + stomp + stack spoof</td>
+          <td class="status-warn">Viable with maintenance</td>
+          <td>Current private baseline. Needs updates after client changes.</td>
+        </tr>
+        <tr>
+          <td>Luau scheduler push</td>
+          <td class="status-warn">Viable with maintenance</td>
+          <td>Most fragile part. Keep modular.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:1.25rem;color:var(--muted);font-size:0.9rem;">
+      Hard truth: nothing public stays working for years. The concepts in the Hyperion notes remain valid through 2027. The concrete offsets, gadgets and stubs must be refreshed. Treat the private core as living code.
+    </p>
+  </section>
+
+  <section class="section" id="hyperion">
+    <h2>Hyperion — what still matters</h2>
+    <div class="card" style="margin-bottom:1rem;">
+      <p style="color:var(--text);">1. Never leave <code>PAGE_EXECUTE_READWRITE</code>.</p>
+      <p style="color:var(--text);">2. Resolve syscalls from clean ntdll at runtime.</p>
+      <p style="color:var(--text);">3. Prefer thread hijack / APC over new threads.</p>
+      <p style="color:var(--text);">4. Stack spoof every return into Roblox code.</p>
+      <p style="color:var(--text);">5. Keep the Luau push modular — it breaks first.</p>
+    </div>
+    <p style="color:var(--muted);font-size:0.9rem;">Full write-up lives in <code>docs/hyperion_bypass.md</code>.</p>
+  </section>
+
+  <footer>
+    Private bench suite · Not for public distribution · Update after every client push
+  </footer>
+</body>
+</html>
